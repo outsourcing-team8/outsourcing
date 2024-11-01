@@ -28,4 +28,5 @@ public class Menu extends BaseEntity {
 
     private boolean deleted = Boolean.FALSE;
 
+
 }
