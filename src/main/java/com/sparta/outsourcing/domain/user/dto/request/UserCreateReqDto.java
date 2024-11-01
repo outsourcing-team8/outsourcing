@@ -23,7 +23,7 @@ public class UserCreateReqDto {
 
     @NotBlank(message = "패스워드를 입력해주세요.")
     @Size(min = 8, max = 60, message = "패스워드는 8글자 이상 60자 이하로 입력해주세요.")
-    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]+$",
+    @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]+$",
             message = "패스워드는 대소문자 포함 영문 + 숫자 + 특수문자를 최소 1글자씩 포함합니다. ")
     private String password;
 
