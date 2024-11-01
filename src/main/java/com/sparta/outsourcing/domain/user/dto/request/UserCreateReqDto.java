@@ -1,10 +1,7 @@
 package com.sparta.outsourcing.domain.user.dto.request;
 
 import com.sparta.outsourcing.domain.user.entity.UserRole;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,7 +27,7 @@ public class UserCreateReqDto {
             message = "패스워드는 대소문자 포함 영문 + 숫자 + 특수문자를 최소 1글자씩 포함합니다. ")
     private String password;
 
-    @NotBlank(message = "권한 정보를 입력해주세요.")
+    @NotNull(message = "권한 정보를 입력해주세요.'")
     private UserRole role;
 
 }
