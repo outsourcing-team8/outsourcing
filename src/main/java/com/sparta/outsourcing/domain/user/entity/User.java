@@ -1,14 +1,17 @@
 package com.sparta.outsourcing.domain.user.entity;
 
 import com.sparta.outsourcing.common.entity.BaseEntity;
+import com.sparta.outsourcing.domain.user.dto.request.UserCreateReqDto;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
+@Table(name = "users")
 public class User extends BaseEntity {
 
     @Id
@@ -26,4 +29,12 @@ public class User extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     private UserRole role;
+
+    @Builder
+    public User(String email, String password, String nickname, UserRole role) {
+        this.email = email;
+        this.password = password;
+        this.nickname = nickname;
+        this.role = role;
+    }
 }
