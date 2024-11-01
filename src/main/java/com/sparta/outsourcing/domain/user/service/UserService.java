@@ -15,7 +15,6 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-
     public UserCreateRespDto register(UserCreateReqDto dto) {
         userRepository.findByEmail(dto.getEmail())
                 .ifPresent(user -> {throw new CustomApiException(ErrorCode.ALREADY_USER_EXIST);});
