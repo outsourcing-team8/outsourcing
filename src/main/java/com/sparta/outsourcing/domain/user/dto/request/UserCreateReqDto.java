@@ -1,5 +1,6 @@
 package com.sparta.outsourcing.domain.user.dto.request;
 
+import com.sparta.outsourcing.domain.user.entity.User;
 import com.sparta.outsourcing.domain.user.entity.UserRole;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
@@ -30,4 +31,12 @@ public class UserCreateReqDto {
     @NotNull(message = "권한 정보를 입력해주세요.'")
     private UserRole role;
 
+    public User toEntity(){
+        return User.builder()
+                .email(this.email)
+                .password(this.password)
+                .nickname(this.nickname)
+                .role(this.role)
+                .build();
+    }
 }
