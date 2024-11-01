@@ -20,9 +20,6 @@ public class UserService {
         userRepository.findByEmail(dto.getEmail())
                 .ifPresent(user -> {throw new CustomApiException(ErrorCode.ALREADY_USER_EXIST);});
 
-
-
-
         User user = new User(dto);
         return new UserCreateRespDto(userRepository.save(user).getUserId());
     }
