@@ -4,7 +4,6 @@ import com.sparta.outsourcing.common.exception.CustomApiException;
 import com.sparta.outsourcing.common.exception.ErrorCode;
 import com.sparta.outsourcing.domain.store.dto.request.StoreCreateReqDto;
 import com.sparta.outsourcing.domain.store.dto.response.StoreCreateRespDto;
-import com.sparta.outsourcing.domain.store.entity.Store;
 import com.sparta.outsourcing.domain.store.repository.StoreRepository;
 import com.sparta.outsourcing.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
