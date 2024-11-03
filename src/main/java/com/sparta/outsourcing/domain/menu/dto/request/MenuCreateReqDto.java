@@ -4,12 +4,14 @@ import com.sparta.outsourcing.domain.menu.entity.Menu;
 import com.sparta.outsourcing.domain.store.entity.Store;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Range;
 
 @Getter
+@NoArgsConstructor
 public class MenuCreateReqDto {
 
-    @NotBlank(message = "메뉴 이릅을 입력해주세요.")
+    @NotBlank(message = "메뉴 이름을 입력해주세요.")
     private String name;
 
     @NotBlank(message = "메뉴 가격을 입력해주세요.")

@@ -2,7 +2,6 @@ package com.sparta.outsourcing.domain.menu.service;
 
 import com.sparta.outsourcing.domain.menu.dto.request.MenuCreateReqDto;
 import com.sparta.outsourcing.domain.menu.dto.response.MenuCreateRespDto;
-import com.sparta.outsourcing.domain.menu.entity.Menu;
 import com.sparta.outsourcing.domain.menu.repository.MenuRepository;
 import com.sparta.outsourcing.domain.store.entity.Store;
 import com.sparta.outsourcing.domain.store.repository.StoreRepository;
