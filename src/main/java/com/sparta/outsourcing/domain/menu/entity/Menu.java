@@ -1,9 +1,10 @@
 package com.sparta.outsourcing.domain.menu.entity;
 
-import com.sparta.outsourcing.domain.store.entity.Store;
 import com.sparta.outsourcing.common.entity.BaseEntity;
+import com.sparta.outsourcing.domain.store.entity.Store;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -29,4 +30,11 @@ public class Menu extends BaseEntity {
     private boolean deleted = Boolean.FALSE;
 
 
+    @Builder
+    public Menu(Store store, String name, int price, boolean deleted) {
+        this.store = store;
+        this.name = name;
+        this.price = price;
+        this.deleted = deleted;
+    }
 }
