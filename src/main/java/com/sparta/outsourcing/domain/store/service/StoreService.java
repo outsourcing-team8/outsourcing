@@ -20,7 +20,7 @@ public class StoreService {
             throw new CustomApiException(ErrorCode.TOO_MANY_STORES);
         }
         storeRepository.findByName(reqDto.getName())
-                .orElseThrow(() -> new CustomApiException(ErrorCode.ALREADY_STORE_EXIST));
+                .ifPresent(store -> {throw new CustomApiException(ErrorCode.ALREADY_STORE_EXIST);});
 
         return new StoreCreateRespDto(storeRepository.save(reqDto.toEntity(owner)));
     }
