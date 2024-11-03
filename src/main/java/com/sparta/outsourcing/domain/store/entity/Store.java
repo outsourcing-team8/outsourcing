@@ -36,5 +36,12 @@ public class Store extends BaseEntity {
 
     private boolean deleted = Boolean.FALSE;
 
-
+    @Builder
+    public Store(User owner, String name, LocalTime openAt, LocalTime closedAt, int minPrice) {
+        this.owner = owner;
+        this.name = name;
+        this.openAt = openAt;
+        this.closedAt = closedAt;
+        this.minPrice = minPrice;
+    }
 }
