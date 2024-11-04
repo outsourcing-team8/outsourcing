@@ -49,7 +49,14 @@ public class MenuService {
     }
 
 
-    public List<MenuGetRespDto> getMuenuList() {
-        return null;
+    public List<MenuGetRespDto> getMuenuList(Long storeId) {
+        storeRepository.findById(storeId).orElseThrow(()
+                -> new CustomApiException(ErrorCode.STORE_NOT_FOUND));
+        List<Menu> menus = menuRepository.findAllByStoreId(storeId);
+
+        if(menus == null || menus.isEmpty()){
+            throw new CustomApiException(ErrorCode.MENU_NOT_FOUND);
+        }
+        return menus.stream().map(MenuGetRespDto::toDto).toList();
     }
 }
