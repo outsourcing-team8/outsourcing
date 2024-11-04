@@ -5,7 +5,6 @@ import com.sparta.outsourcing.common.exception.ErrorCode;
 import com.sparta.outsourcing.domain.menu.dto.request.MenuCreateReqDto;
 import com.sparta.outsourcing.domain.menu.dto.request.MenuPatchReqDto;
 import com.sparta.outsourcing.domain.menu.dto.response.MenuCreateRespDto;
-import com.sparta.outsourcing.domain.menu.dto.response.MenuDeleteRespDto;
 import com.sparta.outsourcing.domain.menu.dto.response.MenuGetRespDto;
 import com.sparta.outsourcing.domain.menu.dto.response.MenuPatchRespDto;
 import com.sparta.outsourcing.domain.menu.entity.Menu;
@@ -45,15 +44,16 @@ public class MenuService {
             throw new CustomApiException(ErrorCode.STORE_NOT_FOUND);
         }
 
-        dto.toEntity(store);
-        return dto.toDto(menuId, dto);
+        menu.update(dto.getName(), dto.getPrice());
+        return new MenuPatchRespDto(menuId, dto);
     }
 
 
-    public List<MenuGetRespDto> getMuenuList(Long storeId) {
-        storeRepository.findById(storeId).orElseThrow(()
+    public List<MenuGetRespDto> getMenuList(Long storeId) {
+       Store store = storeRepository.findById(storeId).orElseThrow(()
                 -> new CustomApiException(ErrorCode.STORE_NOT_FOUND));
-        List<Menu> menus = menuRepository.findAllByStoreId(storeId);
+
+        List<Menu> menus = menuRepository.findAllByStore(store);
 
         if (menus == null || menus.isEmpty()) {
             throw new CustomApiException(ErrorCode.MENU_NOT_FOUND);
