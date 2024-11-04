@@ -1,6 +1,8 @@
 package com.sparta.outsourcing.common.security.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sparta.outsourcing.common.exception.CustomApiException;
+import com.sparta.outsourcing.common.exception.ErrorCode;
 import com.sparta.outsourcing.common.security.JwtProvider;
 import com.sparta.outsourcing.common.security.LoginUser;
 import com.sparta.outsourcing.common.security.dto.LoginReqDto;
@@ -44,7 +46,7 @@ public class CustomUsernamePasswordAuthenticationFilter extends UsernamePassword
                     = UsernamePasswordAuthenticationToken.unauthenticated(loginUser.getEmail(), loginUser.getPassword());
             return this.getAuthenticationManager().authenticate(unauthenticated);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new CustomApiException(ErrorCode.AUTHENTICATION_ERROR);
         }
     }
 
