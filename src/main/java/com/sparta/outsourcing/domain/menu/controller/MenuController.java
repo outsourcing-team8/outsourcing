@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/stores/{storeId}/menu")
+@RequestMapping("/api/stores/{storeId}/menus")
 public class MenuController {
     private final MenuService menuService;
 
