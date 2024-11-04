@@ -11,7 +11,7 @@ import lombok.*;
 import static com.sparta.outsourcing.domain.order.enums.OrderStatus.PENDING;
 
 @Entity
-@Table(name = "ORDER")
+@Table(name = "ORDERS")
 @Getter
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
