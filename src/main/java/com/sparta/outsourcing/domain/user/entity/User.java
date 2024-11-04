@@ -35,7 +35,8 @@ public class User extends BaseEntity {
     private boolean deleted = Boolean.FALSE;
 
     @Builder
-    public User(String email, String password, String nickname, UserRole role) {
+    public User(Long userId, String email, String password, String nickname, UserRole role) {
+        this.userId = userId;
         this.email = email;
         this.password = password;
         this.nickname = nickname;
