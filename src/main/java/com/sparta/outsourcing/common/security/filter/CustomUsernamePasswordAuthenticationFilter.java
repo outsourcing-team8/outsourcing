@@ -54,7 +54,7 @@ public class CustomUsernamePasswordAuthenticationFilter extends UsernamePassword
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
         ObjectMapper mapper = new ObjectMapper();
         SecurityContextHolder.getContext().setAuthentication(authResult);
-        String token = jwtProvider.generateToken(authResult);
+        String token = jwtProvider.generateToken((LoginUser) authResult.getPrincipal());
 
         response.addHeader("Authorization", token);
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
