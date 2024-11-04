@@ -5,8 +5,6 @@ import lombok.Getter;
 @Getter
 public enum ErrorCode {
 
-    STORE_NOT_FOUND(404, "해당 가게가 없습니다."),
-
     USER_NOT_FOUND(404, "해당 유저가 없습니다."),
     ALREADY_USER_EXIST(400, "존재하는 유저입니다."),
     MISS_MATCH_PASSWORD(400, "패스워드 검증에 실패하였습니다."),
@@ -20,6 +18,8 @@ public enum ErrorCode {
     INVALID_TOKEN_ERROR(401, "잘못된 토큰 정보입니다."),
     TOKEN_NOT_FOUND(401, "토큰 정보를 찾을 수 없습니다."),
     AUTHORITY_NOT_FOUND(403, "권한 정보를 찾을 수 없습니다."),
+    STORE_NOT_FOUND(404, "해당 가게가 없습니다."),
+    NOT_STORE_OWNER(401, "해당 가게의 사장이 아닙니다."),
     ;
 
     private final int status;
