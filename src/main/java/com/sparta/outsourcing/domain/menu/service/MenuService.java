@@ -41,8 +41,9 @@ public class MenuService {
         if (!Objects.equals(store.getStoreId(), menu.getStore().getStoreId())) {
             throw new CustomApiException(ErrorCode.STORE_NOT_FOUND);
         }
-        menu.update(store,dto.getName(),dto.getPrice());
-        return new MenuPatchRespDto(menuId,dto);
+
+        menu.update(dto.getName(), dto.getPrice());
+        return new MenuPatchRespDto(menuId, dto);
     }
 
 

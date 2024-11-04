@@ -16,6 +16,5 @@ public class MenuPatchRespDto {
         this.id = menuId;
         this.name = dto.getName();
         this.price = dto.getPrice();
-
     }
 }
