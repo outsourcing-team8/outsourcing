@@ -19,6 +19,7 @@ public class UserService {
     public UserCreateRespDto register(UserCreateReqDto dto) {
         userRepository.findByEmail(dto.getEmail())
                 .ifPresent(user -> {throw new CustomApiException(ErrorCode.ALREADY_USER_EXIST);});
+
         dto.setPassword(passwordEncoder.encode(dto.getPassword()));
         return new UserCreateRespDto(userRepository.save(dto.toEntity()).getUserId());
     }
