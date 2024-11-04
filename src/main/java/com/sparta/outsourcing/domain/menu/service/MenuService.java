@@ -68,8 +68,7 @@ public class MenuService {
                 -> new CustomApiException(ErrorCode.MENU_NOT_FOUND));
 
         if (menu == null) {
-            throw new CustomApiException(ErrorCode.MENU_NOT_FOUND);
-        }
+            throw new CustomApiException(ErrorCode.MENU_NOT_FOUND);}
         return MenuGetRespDto.toDto(menu);
     }
 }
