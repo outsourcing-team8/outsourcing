@@ -12,11 +12,11 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/stores/{storeId}")
+@RequestMapping("/api/stores/{storeId}/menu")
 public class MenuController {
     private final MenuService menuService;
 
-    @PostMapping("/menu")
+    @PostMapping()
     public ResponseEntity<MenuCreateRespDto> createMenu(
             @PathVariable Long storeId,
             @RequestBody @Valid MenuCreateReqDto dto) {
@@ -24,15 +24,6 @@ public class MenuController {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(menuService.createMenu(storeId,dto));
-    }
-
-    @PatchMapping("/menu/{menuId}")
-    public ResponseEntity<MenuCreateRespDto> updateMenu(
-            @PathVariable Long storeId,
-            @PathVariable Long menuId,
-            @RequestBody @Valid MenuPatchReqDto dto){
-
-        return null;
     }
 
 }
