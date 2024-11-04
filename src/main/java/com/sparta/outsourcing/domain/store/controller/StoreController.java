@@ -6,6 +6,7 @@ import com.sparta.outsourcing.domain.store.dto.request.StoreGetReqDto;
 import com.sparta.outsourcing.domain.store.dto.request.StorePatchReqDto;
 import com.sparta.outsourcing.domain.store.dto.response.StoreCreateRespDto;
 import com.sparta.outsourcing.domain.store.dto.response.StoreGetRespDto;
+import com.sparta.outsourcing.domain.store.dto.response.StoreOneGetRespDto;
 import com.sparta.outsourcing.domain.store.dto.response.StorePatchRespDto;
 import com.sparta.outsourcing.domain.store.service.StoreService;
 import jakarta.validation.Valid;
@@ -52,5 +53,12 @@ public class StoreController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(storeService.getStores(page-1, size, reqDto));
+    }
+
+    @GetMapping("/{storeId}")
+    public ResponseEntity<StoreOneGetRespDto> getOneStore(@PathVariable Long storeId) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(storeService.getOneStore(storeId));
     }
 }

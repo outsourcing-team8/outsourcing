@@ -2,11 +2,14 @@ package com.sparta.outsourcing.domain.store.service;
 
 import com.sparta.outsourcing.common.exception.CustomApiException;
 import com.sparta.outsourcing.common.exception.ErrorCode;
+import com.sparta.outsourcing.domain.menu.entity.Menu;
+import com.sparta.outsourcing.domain.menu.repository.MenuRepository;
 import com.sparta.outsourcing.domain.store.dto.request.StoreCreateReqDto;
 import com.sparta.outsourcing.domain.store.dto.request.StoreGetReqDto;
 import com.sparta.outsourcing.domain.store.dto.request.StorePatchReqDto;
 import com.sparta.outsourcing.domain.store.dto.response.StoreCreateRespDto;
 import com.sparta.outsourcing.domain.store.dto.response.StorePatchRespDto;
+import com.sparta.outsourcing.domain.store.dto.response.StoreOneGetRespDto;
 import com.sparta.outsourcing.domain.store.entity.Store;
 import com.sparta.outsourcing.domain.store.dto.response.StoreGetRespDto;
 import com.sparta.outsourcing.domain.store.repository.StoreRepository;
@@ -21,12 +24,15 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class StoreService {
 
     private final StoreRepository storeRepository;
     private final UserRepository userRepository;
+    private final MenuRepository menuRepository;
 
     public StoreCreateRespDto createStore(Long ownerId, StoreCreateReqDto reqDto) {
         User owner = userRepository.findById(ownerId)
@@ -59,5 +65,12 @@ public class StoreService {
         String name = reqDto.getName();
         if(name == null ||  name.isEmpty()) return storeRepository.findAllByDeletedIsFalse(pageable).map(StoreGetRespDto::new);
         return storeRepository.findAllByDeletedIsFalseAndNameContaining(name, pageable).map(StoreGetRespDto::new);
+    }
+
+    public StoreOneGetRespDto getOneStore(Long storeId) {
+        Store store = storeRepository.findById(storeId)
+                .orElseThrow(() -> new CustomApiException(ErrorCode.STORE_NOT_FOUND));
+        List<Menu> menuList = menuRepository.findAllByStore(store);
+        return new StoreOneGetRespDto(store, menuList);
     }
 }
