@@ -1,5 +1,6 @@
 package com.sparta.outsourcing.domain.menu.controller;
 
+import com.sparta.outsourcing.domain.menu.dto.request.MenuPatchReqDto;
 import com.sparta.outsourcing.domain.menu.dto.request.MenuCreateReqDto;
 import com.sparta.outsourcing.domain.menu.dto.response.MenuCreateRespDto;
 import com.sparta.outsourcing.domain.menu.service.MenuService;
@@ -18,12 +19,20 @@ public class MenuController {
     @PostMapping("/menu")
     public ResponseEntity<MenuCreateRespDto> createMenu(
             @PathVariable Long storeId,
-            @RequestBody @Valid MenuCreateReqDto menuCreateReqDto) {
+            @RequestBody @Valid MenuCreateReqDto dto) {
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(menuService.createMenu(storeId,menuCreateReqDto));
+                .body(menuService.createMenu(storeId,dto));
     }
 
+    @PatchMapping("/menu/{menuId}")
+    public ResponseEntity<MenuCreateRespDto> updateMenu(
+            @PathVariable Long storeId,
+            @PathVariable Long menuId,
+            @RequestBody @Valid MenuPatchReqDto dto){
+
+        return null;
+    }
 
 }
