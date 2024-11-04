@@ -34,12 +34,20 @@ public class User extends BaseEntity {
 
     private boolean deleted = Boolean.FALSE;
 
+    @Column(nullable = false)
+    private String phoneNumber;
+
+    @Embedded
+    private Address address;
+
     @Builder
-    public User(Long userId, String email, String password, String nickname, UserRole role) {
+    public User(Long userId, String email, String password, String nickname, UserRole role, String phoneNumber, Address address) {
         this.userId = userId;
         this.email = email;
         this.password = password;
         this.nickname = nickname;
         this.role = role;
+        this.phoneNumber = phoneNumber;
+        this.address = address;
     }
 }
