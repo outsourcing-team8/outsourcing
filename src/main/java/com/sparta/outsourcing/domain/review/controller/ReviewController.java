@@ -4,6 +4,7 @@ import com.sparta.outsourcing.domain.review.dto.request.ReviewCreateReqDto;
 import com.sparta.outsourcing.domain.review.dto.response.ReviewCreateRespDto;
 import com.sparta.outsourcing.domain.review.service.ReviewService;
 import com.sparta.outsourcing.domain.user.entity.User;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +22,7 @@ public class ReviewController {
     public ResponseEntity<ReviewCreateRespDto> createReview(
             @AuthenticationPrincipal User user,
             @PathVariable("orderId") Long orderId,
-            @RequestBody ReviewCreateReqDto reqDto
+            @RequestBody @Valid ReviewCreateReqDto reqDto
     ) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
