@@ -44,8 +44,8 @@ public class MenuService {
             throw new CustomApiException(ErrorCode.STORE_NOT_FOUND);
         }
 
-        dto.toEntity(store);
-        return dto.toDto(menuId, dto);
+        menu.update(dto.getName(), dto.getPrice());
+        return new MenuPatchRespDto(menuId, dto);
     }
 
 
