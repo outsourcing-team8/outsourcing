@@ -27,7 +27,7 @@ public class MenuController {
                 .body(menuService.createMenu(storeId,dto));
     }
 
-    @PatchMapping("/menu/{menuId}")
+    @PatchMapping("/{menuId}")
     public ResponseEntity<MenuPatchRespDto> patchMenu(
             @PathVariable Long storeId,
             @PathVariable Long menuId,
