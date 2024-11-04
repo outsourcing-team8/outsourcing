@@ -19,20 +19,5 @@ public class MenuPatchReqDto {
     @Range(min = 0, max = 500000, message = "메뉴 가격은 최대 50만원 까지 가능합니다.")
     private int price;
 
-    public Menu toEntity(Store store) {
-        return Menu.builder()
-                .store(store)
-                .name(name)
-                .price(price)
-                .build();
-    }
 
-    public MenuPatchRespDto toDto(Long menuId, MenuPatchReqDto dto) {
-        return new MenuPatchRespDto(
-                menuId,
-                dto.getName(),
-                dto.getPrice()
-        );
-
-    }
 }
