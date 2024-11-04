@@ -56,7 +56,7 @@ public class MenuController {
             @PathVariable Long storeId) {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(menuService.getMuenu(menuId,storeId));
+                .body(menuService.getMuenu(menuId, storeId));
     }
 
 }
