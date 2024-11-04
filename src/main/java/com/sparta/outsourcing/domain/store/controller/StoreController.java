@@ -21,12 +21,23 @@ public class StoreController {
     private final StoreService storeService;
 
     @PostMapping
-    public ResponseEntity<StoreCreateRespDto> createStore(@AuthenticationPrincipal User user, @RequestBody @Valid StoreCreateReqDto reqDto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(storeService.createStore(user, reqDto));
+    public ResponseEntity<StoreCreateRespDto> createStore(
+            @AuthenticationPrincipal User user,
+            @RequestBody @Valid StoreCreateReqDto reqDto
+    ) {
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(storeService.createStore(user, reqDto));
     }
 
     @PatchMapping("/{storeId}")
-    public ResponseEntity<StoreUpdateRespDto> updateStore(@AuthenticationPrincipal User user, @PathVariable Long storeId, @RequestBody @Valid StoreUpdateReqDto reqDto) {
-        return ResponseEntity.status(HttpStatus.OK).body(storeService.updateStore(user, storeId, reqDto));
+    public ResponseEntity<StoreUpdateRespDto> updateStore(
+            @AuthenticationPrincipal User user,
+            @PathVariable Long storeId,
+            @RequestBody @Valid StoreUpdateReqDto reqDto
+    ) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(storeService.updateStore(user, storeId, reqDto));
     }
 }
