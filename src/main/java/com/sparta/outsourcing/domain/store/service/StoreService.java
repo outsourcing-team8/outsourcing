@@ -26,6 +26,8 @@ import java.util.Objects;
 
 import java.util.List;
 
+import java.util.Objects;
+
 @Service
 @RequiredArgsConstructor
 public class StoreService {
@@ -72,5 +74,15 @@ public class StoreService {
                 .orElseThrow(() -> new CustomApiException(ErrorCode.STORE_NOT_FOUND));
         List<Menu> menuList = menuRepository.findAllByStoreStoreId(storeId);
         return new StoreOneGetRespDto(store, menuList);
+    }
+
+    public void deleteStore(User user, Long storeId) {
+        Store store = storeRepository.findById(storeId)
+                .orElseThrow(() -> new CustomApiException(ErrorCode.STORE_NOT_FOUND));
+        if(!Objects.equals(user.getUserId(), store.getOwner().getUserId())) {
+            throw new CustomApiException(ErrorCode.STORE_NOT_OWNER);
+        }
+
+        storeRepository.delete(store);
     }
 }
