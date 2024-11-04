@@ -34,7 +34,7 @@ public class UserService {
                 .orElseThrow(() -> new CustomApiException(ErrorCode.USER_NOT_FOUND));
 
         if (!passwordEncoder.matches(dto.getPassword(), findUser.getPassword())) {
-            throw new CustomApiException(ErrorCode.MiSS_MATCH_PASSWORD);
+            throw new CustomApiException(ErrorCode.MISS_MATCH_PASSWORD);
         }
 
         userRepository.delete(findUser);
