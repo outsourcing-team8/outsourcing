@@ -47,7 +47,7 @@ public class SecurityConfig {
 
 
     @Bean
-    @Profile("test1")
+    @Profile("security")
     public SecurityFilterChain securityFilterChainTest(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
@@ -55,8 +55,11 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/join").permitAll()
                         .requestMatchers("/auth/sign").permitAll()
+                        .requestMatchers("/error").permitAll()
                         .anyRequest().authenticated()
                 )
+                .formLogin(AbstractHttpConfigurer::disable)
+                .httpBasic(AbstractHttpConfigurer::disable)
                 .addFilterBefore(new GlobalFilterExceptionHandler(), UsernamePasswordAuthenticationFilter.class)
                 .addFilter(new CustomUsernamePasswordAuthenticationFilter(authenticationManager(authenticationConfiguration), jwtProvider))
                 .anonymous(AbstractHttpConfigurer::disable)
