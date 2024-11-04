@@ -49,18 +49,18 @@ public class MenuService {
     }
 
 
-    public List<MenuGetRespDto> getMuenuList(Long storeId) {
-        storeRepository.findById(storeId).orElseThrow(()
+    public List<MenuGetRespDto> getMenuList(Long storeId) {
+       Store store = storeRepository.findById(storeId).orElseThrow(()
                 -> new CustomApiException(ErrorCode.STORE_NOT_FOUND));
-        List<Menu> menus = menuRepository.findAllByStoreId(storeId);
 
-        if (menus == null || menus.isEmpty()) {
-            throw new CustomApiException(ErrorCode.MENU_NOT_FOUND);
-        }
+        List<Menu> menus = menuRepository.findAllByStore(store);
+
+
         return menus.stream().map(MenuGetRespDto::toDto).toList();
     }
 
-    public MenuGetRespDto getMuenu(Long menuId, Long storeId) {
+
+    public MenuGetRespDto getMenu(Long menuId, Long storeId) {
         storeRepository.findById(storeId).orElseThrow(()
                 -> new CustomApiException(ErrorCode.STORE_NOT_FOUND));
 
