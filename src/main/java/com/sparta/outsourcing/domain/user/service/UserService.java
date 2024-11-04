@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -29,6 +30,7 @@ public class UserService {
         return new UserCreateRespDto(userRepository.save(dto.toEntity()).getUserId());
     }
 
+    @Transactional
     public UserDeleteRespDto deleteUser(Long userId, UserDeleteReqDto dto) {
         User findUser = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomApiException(ErrorCode.USER_NOT_FOUND));
