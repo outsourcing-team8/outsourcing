@@ -46,9 +46,9 @@ public class Store extends BaseEntity {
         this.minPrice = minPrice;
     }
 
-    public void update(LocalTime openAt, LocalTime closedAt, int minPrice) {
-        this.openAt = openAt;
-        this.closedAt = closedAt;
-        this.minPrice = minPrice;
+    public void update(LocalTime openAt, LocalTime closedAt, Integer minPrice) {
+        if(openAt != null) this.openAt = openAt;
+        if(closedAt != null) this.closedAt = closedAt;
+        if(minPrice != null) this.minPrice = minPrice;
     }
 }
