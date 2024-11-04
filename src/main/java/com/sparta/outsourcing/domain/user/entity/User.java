@@ -7,11 +7,13 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "users")
+@SQLDelete(sql = "update users set deleted = true where user_id = ?")
 public class User extends BaseEntity {
 
     @Id
@@ -30,6 +32,8 @@ public class User extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private UserRole role;
 
+    private boolean deleted = Boolean.FALSE;
+
     @Column(nullable = false)
     private String phoneNumber;
 
@@ -37,7 +41,8 @@ public class User extends BaseEntity {
     private Address address;
 
     @Builder
-    public User(String email, String password, String nickname, UserRole role, String phoneNumber, Address address) {
+    public User(Long userId, String email, String password, String nickname, UserRole role, String phoneNumber, Address address) {
+        this.userId = userId;
         this.email = email;
         this.password = password;
         this.nickname = nickname;
