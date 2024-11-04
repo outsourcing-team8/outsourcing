@@ -32,7 +32,7 @@ public class MenuController {
                 .body(menuService.createMenu(storeId, dto));
     }
 
-    @PatchMapping("/menu/{menuId}")
+    @PatchMapping("/{menuId}")
     public ResponseEntity<MenuPatchRespDto> patchMenu(
             @PathVariable Long storeId,
             @PathVariable Long menuId,
@@ -48,6 +48,15 @@ public class MenuController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(menuService.getMuenuList(storeId));
+    }
+
+    @GetMapping("/{menuId}")
+    public ResponseEntity<MenuGetRespDto> getMenu(
+            @PathVariable Long menuId,
+            @PathVariable Long storeId) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(menuService.getMuenu(menuId,storeId));
     }
 
 }
