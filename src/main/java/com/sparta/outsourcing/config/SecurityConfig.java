@@ -50,6 +50,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/join").permitAll()
                         .requestMatchers("/auth/sign").permitAll()
+                        .requestMatchers("/api/stores").hasRole("OWNER")
+                        .requestMatchers("/api/stores/{storeId}").hasRole("OWNER")
                         .requestMatchers("/error").permitAll()
                         .anyRequest().authenticated()
                 )

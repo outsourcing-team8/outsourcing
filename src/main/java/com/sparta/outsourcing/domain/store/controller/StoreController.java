@@ -6,7 +6,6 @@ import com.sparta.outsourcing.domain.store.dto.request.StoreUpdateReqDto;
 import com.sparta.outsourcing.domain.store.dto.response.StoreCreateRespDto;
 import com.sparta.outsourcing.domain.store.dto.response.StoreUpdateRespDto;
 import com.sparta.outsourcing.domain.store.service.StoreService;
-import com.sparta.outsourcing.domain.user.entity.User;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -33,12 +32,12 @@ public class StoreController {
 
     @PatchMapping("/{storeId}")
     public ResponseEntity<StoreUpdateRespDto> updateStore(
-            @AuthenticationPrincipal User user,
+            @AuthenticationPrincipal LoginUser loginUser,
             @PathVariable Long storeId,
             @RequestBody @Valid StoreUpdateReqDto reqDto
     ) {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(storeService.updateStore(user, storeId, reqDto));
+                .body(storeService.updateStore(loginUser.getUser().getUserId(), storeId, reqDto));
     }
 }

@@ -24,7 +24,8 @@ public class StoreService {
     private final UserRepository userRepository;
 
     public StoreCreateRespDto createStore(Long ownerId, StoreCreateReqDto reqDto) {
-        User owner = userRepository.findById(ownerId).orElse(null);
+        User owner = userRepository.findById(ownerId)
+                .orElseThrow(() -> new CustomApiException(ErrorCode.USER_NOT_FOUND));
         if(storeRepository.countByOwnerAndDeletedIsFalse(owner) >= 3) {
             throw new CustomApiException(ErrorCode.TOO_MANY_STORES);
         }
@@ -35,10 +36,12 @@ public class StoreService {
     }
 
     @Transactional
-    public StoreUpdateRespDto updateStore(User user, Long storeId, StoreUpdateReqDto reqDto) {
+    public StoreUpdateRespDto updateStore(Long ownerId, Long storeId, StoreUpdateReqDto reqDto) {
+        User owner = userRepository.findById(ownerId)
+                .orElseThrow(() -> new CustomApiException(ErrorCode.USER_NOT_FOUND));
         Store store = storeRepository.findById(storeId)
                 .orElseThrow(() -> new CustomApiException(ErrorCode.STORE_NOT_FOUND));
-        if(!Objects.equals(user.getUserId(), store.getOwner().getUserId())) {
+        if(!Objects.equals(owner.getUserId(), store.getOwner().getUserId())) {
             throw new CustomApiException(ErrorCode.NOT_STORE_OWNER);
         }
 
