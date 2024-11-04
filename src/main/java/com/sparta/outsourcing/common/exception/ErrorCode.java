@@ -6,7 +6,9 @@ import lombok.Getter;
 public enum ErrorCode {
 
     USER_NOT_FOUND(404, "해당 유저가 없습니다."),
-    ALREADY_USER_EXIST(400, "존재하는 유저입니다.");
+    ALREADY_USER_EXIST(400, "존재하는 유저입니다."),
+    MISS_MATCH_PASSWORD(400, "패스워드 검증에 실패하였습니다."),
+    ;
 
     private final int status;
     private final String message;
