@@ -16,7 +16,7 @@ public class StoreService {
     private final StoreRepository storeRepository;
 
     public StoreCreateRespDto createStore(User owner, StoreCreateReqDto reqDto) {
-        if(storeRepository.countByUser(owner) >= 3) {
+        if(storeRepository.countByOwnerAndDeletedIsFalse(owner) >= 3) {
             throw new CustomApiException(ErrorCode.TOO_MANY_STORES);
         }
         storeRepository.findByName(reqDto.getName())
