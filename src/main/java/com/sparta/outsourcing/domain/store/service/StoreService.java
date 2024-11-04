@@ -9,6 +9,7 @@ import com.sparta.outsourcing.domain.store.dto.response.StoreUpdateRespDto;
 import com.sparta.outsourcing.domain.store.entity.Store;
 import com.sparta.outsourcing.domain.store.repository.StoreRepository;
 import com.sparta.outsourcing.domain.user.entity.User;
+import com.sparta.outsourcing.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,8 +21,10 @@ import java.util.Objects;
 public class StoreService {
 
     private final StoreRepository storeRepository;
+    private final UserRepository userRepository;
 
-    public StoreCreateRespDto createStore(User owner, StoreCreateReqDto reqDto) {
+    public StoreCreateRespDto createStore(Long ownerId, StoreCreateReqDto reqDto) {
+        User owner = userRepository.findById(ownerId).orElse(null);
         if(storeRepository.countByOwnerAndDeletedIsFalse(owner) >= 3) {
             throw new CustomApiException(ErrorCode.TOO_MANY_STORES);
         }

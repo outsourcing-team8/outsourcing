@@ -1,5 +1,6 @@
 package com.sparta.outsourcing.domain.store.controller;
 
+import com.sparta.outsourcing.common.security.LoginUser;
 import com.sparta.outsourcing.domain.store.dto.request.StoreCreateReqDto;
 import com.sparta.outsourcing.domain.store.dto.request.StoreUpdateReqDto;
 import com.sparta.outsourcing.domain.store.dto.response.StoreCreateRespDto;
@@ -22,12 +23,12 @@ public class StoreController {
 
     @PostMapping
     public ResponseEntity<StoreCreateRespDto> createStore(
-            @AuthenticationPrincipal User user,
+            @AuthenticationPrincipal LoginUser loginUser,
             @RequestBody @Valid StoreCreateReqDto reqDto
     ) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(storeService.createStore(user, reqDto));
+                .body(storeService.createStore(loginUser.getUser().getUserId(), reqDto));
     }
 
     @PatchMapping("/{storeId}")
