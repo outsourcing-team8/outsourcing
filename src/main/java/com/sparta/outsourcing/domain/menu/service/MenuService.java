@@ -5,6 +5,7 @@ import com.sparta.outsourcing.common.exception.ErrorCode;
 import com.sparta.outsourcing.domain.menu.dto.request.MenuCreateReqDto;
 import com.sparta.outsourcing.domain.menu.dto.request.MenuPatchReqDto;
 import com.sparta.outsourcing.domain.menu.dto.response.MenuCreateRespDto;
+import com.sparta.outsourcing.domain.menu.dto.response.MenuDeleteRespDto;
 import com.sparta.outsourcing.domain.menu.dto.response.MenuGetRespDto;
 import com.sparta.outsourcing.domain.menu.dto.response.MenuPatchRespDto;
 import com.sparta.outsourcing.domain.menu.entity.Menu;
@@ -69,7 +70,7 @@ public class MenuService {
     @Transactional
     public MenuDeleteRespDto deleteMenu(Long menuId, Long storeId) {
         Menu menu = checkException(menuId, storeId);
-        MenuDeleteRespDto.toEntity();
+        menu.deleted();
         return MenuDeleteRespDto.toDto(menu);
     }
 
