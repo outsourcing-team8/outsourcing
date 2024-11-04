@@ -1,5 +1,6 @@
 package com.sparta.outsourcing.domain.user.dto.request;
 
+import com.sparta.outsourcing.domain.user.entity.Address;
 import com.sparta.outsourcing.domain.user.entity.User;
 import com.sparta.outsourcing.domain.user.entity.UserRole;
 import jakarta.validation.constraints.*;
@@ -31,12 +32,20 @@ public class UserCreateReqDto {
     @NotNull(message = "권한 정보를 입력해주세요.'")
     private UserRole role;
 
+    @Pattern(regexp = "^\\d{2,3}-\\d{3,4}-\\d{4}$", message = "휴대폰 번호 양식에 맞지 않습니다.")
+    private String phoneNumber;
+
+    @NotNull(message = "주소를 입력해주세요.")
+    private Address address;
+
     public User toEntity(){
         return User.builder()
                 .email(this.email)
                 .password(this.password)
                 .nickname(this.nickname)
                 .role(this.role)
+                .phoneNumber(this.phoneNumber)
+                .address(this.address)
                 .build();
     }
 }
