@@ -17,7 +17,7 @@ public class UserController {
 
     private final UserService userService;
 
-    @PostMapping("/auth/sign")
+    @PostMapping("/auth/join")
     public ResponseEntity<UserCreateRespDto> join(@RequestBody @Valid UserCreateReqDto dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.register(dto));
     }
