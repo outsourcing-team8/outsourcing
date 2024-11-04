@@ -9,10 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -24,5 +21,13 @@ public class StoreController {
     @PostMapping
     public ResponseEntity<StoreCreateRespDto> createStore(@AuthenticationPrincipal User user, @RequestBody @Valid StoreCreateReqDto reqDto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(storeService.createStore(user, reqDto));
+    }
+
+    @DeleteMapping("/{storeId}")
+    public ResponseEntity<String> deleteStore(@AuthenticationPrincipal User user, @PathVariable Long storeId) {
+        storeService.deleteStore(user, storeId);
+        return ResponseEntity
+                .status(HttpStatus.NO_CONTENT)
+                .body("가게 폐업 성공.");
     }
 }
