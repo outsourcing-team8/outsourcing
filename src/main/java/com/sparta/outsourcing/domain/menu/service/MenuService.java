@@ -45,7 +45,7 @@ public class MenuService {
         }
 
         dto.toEntity(store);
-        return dto.toDto(menuId,dto);
+        return dto.toDto(menuId, dto);
     }
 
 
@@ -54,9 +54,22 @@ public class MenuService {
                 -> new CustomApiException(ErrorCode.STORE_NOT_FOUND));
         List<Menu> menus = menuRepository.findAllByStoreId(storeId);
 
-        if(menus == null || menus.isEmpty()){
+        if (menus == null || menus.isEmpty()) {
             throw new CustomApiException(ErrorCode.MENU_NOT_FOUND);
         }
         return menus.stream().map(MenuGetRespDto::toDto).toList();
+    }
+
+    public MenuGetRespDto getMuenu(Long menuId, Long storeId) {
+        storeRepository.findById(storeId).orElseThrow(()
+                -> new CustomApiException(ErrorCode.STORE_NOT_FOUND));
+
+        Menu menu = menuRepository.findById(menuId).orElseThrow(()
+                -> new CustomApiException(ErrorCode.MENU_NOT_FOUND));
+
+        if (menu == null) {
+            throw new CustomApiException(ErrorCode.MENU_NOT_FOUND);
+        }
+        return MenuGetRespDto.toDto(menu);
     }
 }
