@@ -1,13 +1,14 @@
 package com.sparta.outsourcing.domain.store.entity;
 
-import com.sparta.outsourcing.domain.user.entity.User;
 import com.sparta.outsourcing.common.entity.BaseEntity;
+import com.sparta.outsourcing.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Entity
 @Getter
@@ -20,21 +21,28 @@ public class Store extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private User user;
+    private User owner;
 
     @Column(nullable = false)
     private String name;
 
     @Column(nullable = false)
-    private LocalDateTime openAt;
+    private LocalTime openAt;
 
     @Column(nullable = false)
-    private LocalDateTime closedAt;
+    private LocalTime closedAt;
 
     @Column(nullable = false)
     private int minPrice;
 
     private boolean deleted = Boolean.FALSE;
 
-
+    @Builder
+    public Store(User owner, String name, LocalTime openAt, LocalTime closedAt, int minPrice) {
+        this.owner = owner;
+        this.name = name;
+        this.openAt = openAt;
+        this.closedAt = closedAt;
+        this.minPrice = minPrice;
+    }
 }
