@@ -30,11 +30,19 @@ public class User extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private UserRole role;
 
+    @Column(nullable = false)
+    private String phoneNumber;
+
+    @Embedded
+    private Address address;
+
     @Builder
-    public User(String email, String password, String nickname, UserRole role) {
+    public User(String email, String password, String nickname, UserRole role, String phoneNumber, Address address) {
         this.email = email;
         this.password = password;
         this.nickname = nickname;
         this.role = role;
+        this.phoneNumber = phoneNumber;
+        this.address = address;
     }
 }
