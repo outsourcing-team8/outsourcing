@@ -1,5 +1,6 @@
 package com.sparta.outsourcing.domain.menu.dto.request;
 
+import com.sparta.outsourcing.domain.menu.dto.response.MenuPatchRespDto;
 import com.sparta.outsourcing.domain.menu.entity.Menu;
 import com.sparta.outsourcing.domain.store.entity.Store;
 import jakarta.validation.constraints.NotBlank;
@@ -24,5 +25,14 @@ public class MenuPatchReqDto {
                 .name(name)
                 .price(price)
                 .build();
+    }
+
+    public MenuPatchRespDto toDto(Long menuId, MenuPatchReqDto dto) {
+        return new MenuPatchRespDto(
+                menuId,
+                dto.getName(),
+                dto.getPrice()
+        );
+
     }
 }
