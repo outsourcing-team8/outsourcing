@@ -8,10 +8,10 @@ import com.sparta.outsourcing.domain.store.dto.request.StoreCreateReqDto;
 import com.sparta.outsourcing.domain.store.dto.request.StoreGetReqDto;
 import com.sparta.outsourcing.domain.store.dto.request.StorePatchReqDto;
 import com.sparta.outsourcing.domain.store.dto.response.StoreCreateRespDto;
-import com.sparta.outsourcing.domain.store.dto.response.StorePatchRespDto;
-import com.sparta.outsourcing.domain.store.dto.response.StoreOneGetRespDto;
-import com.sparta.outsourcing.domain.store.entity.Store;
 import com.sparta.outsourcing.domain.store.dto.response.StoreGetRespDto;
+import com.sparta.outsourcing.domain.store.dto.response.StoreOneGetRespDto;
+import com.sparta.outsourcing.domain.store.dto.response.StorePatchRespDto;
+import com.sparta.outsourcing.domain.store.entity.Store;
 import com.sparta.outsourcing.domain.store.repository.StoreRepository;
 import com.sparta.outsourcing.domain.user.entity.User;
 import com.sparta.outsourcing.domain.user.repository.UserRepository;
@@ -22,9 +22,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Objects;
-
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -72,5 +71,17 @@ public class StoreService {
                 .orElseThrow(() -> new CustomApiException(ErrorCode.STORE_NOT_FOUND));
         List<Menu> menuList = menuRepository.findAllByStoreStoreId(storeId);
         return new StoreOneGetRespDto(store, menuList);
+    }
+
+    public void deleteStore(Long ownerId, Long storeId) {
+        userRepository.findById(ownerId)
+                .orElseThrow(() -> new CustomApiException(ErrorCode.USER_NOT_FOUND));
+        Store store = storeRepository.findByStoreIdAndDeletedIsFalse(storeId)
+                .orElseThrow(() -> new CustomApiException(ErrorCode.STORE_NOT_FOUND));
+        if(!Objects.equals(ownerId, store.getOwner().getUserId())) {
+            throw new CustomApiException(ErrorCode.NOT_STORE_OWNER);
+        }
+
+        storeRepository.delete(store);
     }
 }

@@ -13,4 +13,5 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
     Optional<Store> findByName(String name);
     Page<Store> findAllByDeletedIsFalse(Pageable pageable);
     Page<Store> findAllByDeletedIsFalseAndNameContaining(String name, Pageable pageable);
+    Optional<Store> findByStoreIdAndDeletedIsFalse(Long storeId);
 }
