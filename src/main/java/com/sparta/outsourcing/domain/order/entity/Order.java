@@ -53,7 +53,11 @@ public class Order extends BaseEntity {
     @JoinColumn(name = "MENU_ID")
     private Menu menu;
 
-    public static Order create(OrderAddReqDto request, User user, Menu menu) {
+    @Column(name = "STORE_ID")
+    private Long storeId;
+
+    public static Order create(OrderAddReqDto request, User user,
+                               Menu menu, Long storeId) {
         return Order.builder()
                 .amount(request.getAmount())
                 .deliveryAddress(request.getDeliveryAddress())
@@ -62,6 +66,7 @@ public class Order extends BaseEntity {
                 .paymentMethod(request.getPaymentMethod())
                 .user(user)
                 .menu(menu)
+                .storeId(storeId)
                 .build();
     }
 }

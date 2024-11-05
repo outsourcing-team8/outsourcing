@@ -19,6 +19,8 @@ public enum ErrorCode {
     AUTHORITY_NOT_FOUND(403, "권한 정보를 찾을 수 없습니다."),
 
     MENU_NOT_FOUND(404, "해당 메뉴가 없습니다."),
+
+    PAYMENT_METHOD_NOT_SUPPORT(400, "지원하지 않은 결제 방식 입니다.")
     ;
 
     private final int status;
