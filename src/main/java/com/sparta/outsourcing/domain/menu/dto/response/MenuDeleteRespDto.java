@@ -10,16 +10,9 @@ public class MenuDeleteRespDto {
     private Long menuId;
     private boolean deleted;
 
-    public static MenuDeleteRespDto toDto(Menu menu) {
-        return new MenuDeleteRespDto(
-                menu.getMenuId(),
-                menu.isDeleted()
-        );
+    public MenuDeleteRespDto(Menu menu) {
+        this.menuId = menu.getMenuId();
+        this.deleted = menu.isDeleted();
     }
 
-    public static Menu toEntity() {
-    return Menu.builder()
-            .deleted(true)
-            .build();
-    }
 }
