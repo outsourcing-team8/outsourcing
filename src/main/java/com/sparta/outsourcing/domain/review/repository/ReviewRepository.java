@@ -12,4 +12,5 @@ import java.util.Optional;
 public interface ReviewRepository extends JpaRepository<Review, Long> {
     Optional<Review> findByOrder(Order order);
     Page<Review> findByOrder_Menu_StoreAndStarBetween(Store store, int minStar, int maxStar, Pageable pageable);
+    Page<Review> findByOrder_Menu_Store(Store store, Pageable pageable);
 }

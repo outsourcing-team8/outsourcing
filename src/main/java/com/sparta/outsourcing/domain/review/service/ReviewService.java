@@ -7,6 +7,7 @@ import com.sparta.outsourcing.domain.order.repository.OrderRepository;
 import com.sparta.outsourcing.domain.review.dto.request.ReviewCreateReqDto;
 import com.sparta.outsourcing.domain.review.dto.request.ReviewGetReqDto;
 import com.sparta.outsourcing.domain.review.dto.response.ReviewCreateRespDto;
+import com.sparta.outsourcing.domain.review.dto.response.ReviewGetRespDto;
 import com.sparta.outsourcing.domain.review.repository.ReviewRepository;
 import com.sparta.outsourcing.domain.store.entity.Store;
 import com.sparta.outsourcing.domain.store.repository.StoreRepository;
@@ -42,12 +43,21 @@ public class ReviewService {
         return new ReviewCreateRespDto(reviewRepository.save(reqDto.toEntity(order)));
     }
 
-    public Page<ReviewCreateRespDto> getStoreReviews(Pageable pageable, Long storeId, ReviewGetReqDto reqDto) {
+    public Page<ReviewGetRespDto> getStoreReviews(Pageable pageable, Long storeId, ReviewGetReqDto reqDto) {
         Store store = storeRepository.findById(storeId)
                 .orElseThrow(() -> new CustomApiException(ErrorCode.STORE_NOT_FOUND));
 
         return reviewRepository
                 .findByOrder_Menu_StoreAndStarBetween(store, reqDto.getMinStar(), reqDto.getMaxStar(), pageable)
-                .map(ReviewCreateRespDto::new);
+                .map(ReviewGetRespDto::new);
+    }
+
+    public Page<ReviewGetRespDto> getStoreReviews(Pageable pageable, Long storeId) {
+        Store store = storeRepository.findById(storeId)
+                .orElseThrow(() -> new CustomApiException(ErrorCode.STORE_NOT_FOUND));
+
+        return reviewRepository
+                .findByOrder_Menu_Store(store, pageable)
+                .map(ReviewGetRespDto::new);
     }
 }

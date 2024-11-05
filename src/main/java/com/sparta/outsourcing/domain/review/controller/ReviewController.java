@@ -4,6 +4,7 @@ import com.sparta.outsourcing.common.security.LoginUser;
 import com.sparta.outsourcing.domain.review.dto.request.ReviewCreateReqDto;
 import com.sparta.outsourcing.domain.review.dto.request.ReviewGetReqDto;
 import com.sparta.outsourcing.domain.review.dto.response.ReviewCreateRespDto;
+import com.sparta.outsourcing.domain.review.dto.response.ReviewGetRespDto;
 import com.sparta.outsourcing.domain.review.service.ReviewService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +36,7 @@ public class ReviewController {
     }
 
     @GetMapping("/stores/{storeId}")
-    public ResponseEntity<Page<ReviewCreateRespDto>> getStoreReviews(
+    public ResponseEntity<Page<ReviewGetRespDto>> getStoreReviews(
             @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable,
             @PathVariable("storeId") Long storeId,
             @RequestBody ReviewGetReqDto reqDto
@@ -43,5 +44,15 @@ public class ReviewController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(reviewService.getStoreReviews(pageable, storeId, reqDto));
+    }
+
+    @GetMapping("/stores/{storeId}")
+    public ResponseEntity<Page<ReviewGetRespDto>> getStoreReviews(
+            @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable,
+            @PathVariable("storeId") Long storeId
+    ) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(reviewService.getStoreReviews(pageable, storeId));
     }
 }
