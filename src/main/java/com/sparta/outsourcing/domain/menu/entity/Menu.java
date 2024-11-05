@@ -46,4 +46,5 @@ public class Menu extends BaseEntity {
     public void deleted() {
         this.deleted = Boolean.TRUE;
     }
+
 }

@@ -42,7 +42,8 @@ public class MenuService {
                 -> new CustomApiException(ErrorCode.MENU_NOT_FOUND));
 
         if (!Objects.equals(store.getStoreId(), menu.getStore().getStoreId())) {
-            throw new CustomApiException(ErrorCode.STORE_NOT_FOUND);
+
+            throw new CustomApiException(ErrorCode.STORE_NOT_OWN);
         }
 
         menu.update(dto.getName(), dto.getPrice());
@@ -61,6 +62,7 @@ public class MenuService {
 
 
     public MenuGetRespDto getMenu(Long menuId, Long storeId) {
+
         Menu menu = check(menuId, storeId);
         return new MenuGetRespDto(menu);
     }
@@ -78,6 +80,7 @@ public class MenuService {
 
         Menu menu = menuRepository.findById(menuId).orElseThrow(()
                 -> new CustomApiException(ErrorCode.MENU_NOT_FOUND));
+
 
         if (!Objects.equals(store.getStoreId(), menu.getStore().getStoreId())) {
             throw new CustomApiException(ErrorCode.STORE_NOT_OWN);
