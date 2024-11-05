@@ -8,6 +8,7 @@ import com.sparta.outsourcing.domain.order.service.OrderService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,5 +37,13 @@ public class OrderController {
 		Long loginUserId = loginUser.getUser().getUserId();
 		PageRequest pageRequest = PageRequest.of(pageNum, pageSize, Sort.by(DESC, "created_at"));
 		return orderService.findAllByUserId(loginUserId, pageRequest);
+	}
+
+	@PatchMapping("/cancel/{orderId}")
+	@ResponseStatus(HttpStatus.OK)
+	public void cancelOrder(@AuthenticationPrincipal LoginUser loginUser,
+							@PathVariable(name = "orderId") Long orderId) {
+		Long loginUserId = loginUser.getUser().getUserId();
+		// orderService.cancelOrder() 호출
 	}
 }
