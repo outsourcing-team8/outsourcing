@@ -6,15 +6,18 @@ import com.sparta.outsourcing.domain.menu.repository.MenuRepository;
 import com.sparta.outsourcing.domain.order.dto.request.OrderAddReqDto;
 import com.sparta.outsourcing.domain.order.dto.response.OrderAddRespDto;
 import com.sparta.outsourcing.domain.order.dto.response.OrderFindForUserRespDto;
+import com.sparta.outsourcing.domain.order.dto.response.OrderListForOwnerRespDto;
 import com.sparta.outsourcing.domain.order.dto.response.OrderListForUserRespDto;
 import com.sparta.outsourcing.domain.order.entity.Order;
 import com.sparta.outsourcing.domain.order.enums.PaymentMethod;
 import com.sparta.outsourcing.domain.order.repository.OrderRepository;
 import com.sparta.outsourcing.domain.order.validator.OrderValidator;
 import com.sparta.outsourcing.domain.store.entity.Store;
+import com.sparta.outsourcing.domain.store.repository.StoreRepository;
 import com.sparta.outsourcing.domain.user.entity.User;
 import com.sparta.outsourcing.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
@@ -22,9 +25,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static com.sparta.outsourcing.common.exception.ErrorCode.MENU_NOT_FOUND;
-import static com.sparta.outsourcing.common.exception.ErrorCode.USER_NOT_FOUND;
+import static com.sparta.outsourcing.common.exception.ErrorCode.*;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class OrderService {
@@ -32,6 +35,7 @@ public class OrderService {
 	private final MenuRepository menuRepository;
 	private final UserRepository userRepository;
 	private final OrderValidator orderValidator;
+	private final StoreRepository storeRepository;
 
 	@Transactional
 	public OrderAddRespDto add(OrderAddReqDto request, Long loginUserId) {
@@ -64,5 +68,17 @@ public class OrderService {
 				.toList();
 
 		return OrderListForUserRespDto.make(responseOrders, foundOrderList.getPageable());
+	}
+
+	@Transactional(readOnly = true)
+	public OrderListForOwnerRespDto findAllByOwnerId(Long loginUserId, Long storeId, PageRequest pageRequest) {
+		Store foundStore = storeRepository.findById(storeId)
+				.orElseThrow(() -> new CustomApiException(STORE_NOT_FOUND));
+
+		if (!foundStore.getOwner().getUserId().equals(loginUserId)) {
+			throw new CustomApiException(NOT_STORE_OWNER);
+		}
+
+		return null;
 	}
 }
