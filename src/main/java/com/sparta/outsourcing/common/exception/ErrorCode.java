@@ -35,7 +35,6 @@ public enum ErrorCode {
     PAYMENT_METHOD_NOT_SUPPORT(400, "지원하지 않은 결제 방식 입니다."),
     NOT_ORDERED(401, "주문자만 리뷰를 작성할 수 있습니다."),
     ALREADY_REVIEWED_ORDER(409, "이미 리뷰한 주문입니다."),
-    WRONG_STAR_RANGE(400, "잘못된 별점 범위 입니다."),
     ;
 
     private final int status;

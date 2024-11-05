@@ -45,14 +45,9 @@ public class ReviewService {
     public Page<ReviewCreateRespDto> getStoreReviews(Pageable pageable, Long storeId, ReviewGetReqDto reqDto) {
         Store store = storeRepository.findById(storeId)
                 .orElseThrow(() -> new CustomApiException(ErrorCode.STORE_NOT_FOUND));
-        int minStar = reqDto.getMinStar();
-        int maxStar = reqDto.getMaxStar();
-        if(maxStar < minStar) {
-            throw new CustomApiException(ErrorCode.WRONG_STAR_RANGE);
-        }
 
         return reviewRepository
-                .findByOrder_Menu_StoreAndStarBetween(store, minStar, maxStar, pageable)
+                .findByOrder_Menu_StoreAndStarBetween(store, reqDto.getMinStar(), reqDto.getMaxStar(), pageable)
                 .map(ReviewCreateRespDto::new);
     }
 }
