@@ -12,21 +12,20 @@ public class MenuGetRespDto {
     private Long id;
     private Long storeId;
     private String name;
-    private int price;
+    private Integer price;
     private boolean deleted;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public static MenuGetRespDto toDto(Menu menu) {
-        return new MenuGetRespDto(
-                menu.getMenuId(),
-                menu.getStore().getStoreId(),
-                menu.getName(),
-                menu.getPrice(),
-                menu.isDeleted(),
-                menu.getCreatedAt(),
-                menu.getUpdatedAt()
-        );
+
+    public MenuGetRespDto(Menu menu) {
+        this.id = menu.getMenuId();
+        this.storeId = menu.getStore().getStoreId();
+        this.name = menu.getName();
+        this.price = menu.getPrice();
+        this.deleted = menu.isDeleted();
+        this.createdAt = menu.getCreatedAt();
+        this.updatedAt = menu.getUpdatedAt();
     }
 
 }
