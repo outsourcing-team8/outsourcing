@@ -13,8 +13,10 @@ import com.sparta.outsourcing.domain.menu.entity.Menu;
 import com.sparta.outsourcing.domain.menu.repository.MenuRepository;
 import com.sparta.outsourcing.domain.store.entity.Store;
 import com.sparta.outsourcing.domain.store.repository.StoreRepository;
+import com.sparta.outsourcing.domain.user.entity.User;
 import com.sparta.outsourcing.domain.user.entity.UserRole;
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,30 +31,41 @@ public class MenuService {
 
     @Transactional
     public MenuCreateRespDto createMenu(
-            Long storeId, MenuCreateReqDto dto,
-            LoginUser loginUser) throws CustomApiException {
-        if (loginUser.getUser().getRole() != UserRole.OWNER) {
-            throw new CustomApiException(ErrorCode.NO_AUTHORITY);
-        }
+            Long storeId, MenuCreateReqDto dto, LoginUser loginUser) {
+        User user = loginUser.getUser();
+        checkUserAuthority(user);
+
         Store store = storeRepository.findById(storeId).orElseThrow(()
                 -> new CustomApiException(ErrorCode.STORE_NOT_FOUND));
+
+        if (!loginUser.getUser().getEmail().equals(store.getOwner().getEmail())) {
+            throw new CustomApiException(ErrorCode.NO_AUTHORITY);
+        }
+
         Menu menuByName = menuRepository.findByName(dto.getName());
         if (menuByName != null && menuByName.isDeleted()) {
             menuByName.deleted(false);
             menuByName.update(dto.getName(), dto.getPrice());
             return new MenuCreateRespDto(menuByName.getMenuId());
         }
+
         return new MenuCreateRespDto(menuRepository.save(dto.toEntity(store)).getMenuId());
     }
 
     @Transactional
     public MenuPatchRespDto patchMenu(
-            Long storeId, Long menuId, MenuPatchReqDto dto,
-            LoginUser loginUser) {
-        if (loginUser.getUser().getRole() != UserRole.OWNER) {
-            throw new CustomApiException(ErrorCode.NO_AUTHORITY);
+            Long storeId, Long menuId, MenuPatchReqDto dto, LoginUser loginUser) {
+        User user = loginUser.getUser();
+        checkUserAuthority(user);
+
+        Store store = storeRepository.findById(storeId).orElseThrow(()
+                -> new CustomApiException(ErrorCode.STORE_NOT_FOUND));
+
+        Menu menu = menuRepository.findById(menuId).orElseThrow(()
+                -> new CustomApiException(ErrorCode.MENU_NOT_FOUND));
+        if (!Objects.equals(store.getStoreId(), menu.getStore().getStoreId())) {
+            throw new CustomApiException(ErrorCode.STORE_NOT_OWN);
         }
-        Menu menu = validateMenuOwnership(menuId, storeId);
         menu.update(dto.getName(), dto.getPrice());
         return new MenuPatchRespDto(menuId, dto);
     }
@@ -60,16 +73,19 @@ public class MenuService {
     @Transactional
     public MenuDeleteRespDto deleteMenu(
             Long menuId, Long storeId, LoginUser loginUser) {
-        if (loginUser.getUser().getRole() != UserRole.OWNER) {
-            throw new CustomApiException(ErrorCode.NO_AUTHORITY);
-        }
+        User user = loginUser.getUser();
+        checkUserAuthority(user);
+
         Store store = storeRepository.findById(storeId).orElseThrow(()
                 -> new CustomApiException(ErrorCode.STORE_NOT_FOUND));
-        if (!loginUser.getUser().getEmail().equals(store.getOwner().getEmail())) {
+
+        if (user.getEmail().equals(store.getOwner().getEmail())) {
             throw new CustomApiException(ErrorCode.NO_AUTHORITY);
         }
+
         Menu menu = menuRepository.findById(menuId).orElseThrow(()
                 -> new CustomApiException(ErrorCode.MENU_NOT_FOUND));
+
         if (!Objects.equals(store.getStoreId(), menu.getStore().getStoreId())) {
             throw new CustomApiException(ErrorCode.STORE_NOT_OWN);
         }
@@ -81,18 +97,15 @@ public class MenuService {
     public List<MenuGetRespDto> getMenuList(Long storeId) {
         storeRepository.findById(storeId).orElseThrow(()
                 -> new CustomApiException(ErrorCode.STORE_NOT_FOUND));
+
         List<Menu> menus = menuRepository.findAllByStoreStoreId(storeId);
-        return menus.stream().map(MenuGetRespDto::new).filter(m-> !m.isDeleted()).toList();
+
+        return menus.stream().map(MenuGetRespDto::new).filter(m -> !m.isDeleted()).toList();
     }
 
-    private Menu validateMenuOwnership(Long menuId, Long storeId) {
-        Store store = storeRepository.findById(storeId).orElseThrow(()
-                -> new CustomApiException(ErrorCode.STORE_NOT_FOUND));
-        Menu menu = menuRepository.findById(menuId).orElseThrow(()
-                -> new CustomApiException(ErrorCode.MENU_NOT_FOUND));
-        if (!Objects.equals(store.getStoreId(), menu.getStore().getStoreId())) {
-            throw new CustomApiException(ErrorCode.STORE_NOT_OWN);
+    private void checkUserAuthority(User user) {
+        if (user.getRole() != UserRole.OWNER) {
+            throw new CustomApiException(ErrorCode.NO_AUTHORITY);
         }
-        return menu;
     }
 }
