@@ -10,7 +10,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,7 +20,6 @@ public class StoreController {
 
     private final StoreService storeService;
 
-    @Secured("ROLE_OWNER")
     @PostMapping
     public ResponseEntity<StoreCreateRespDto> createStore(
             @AuthenticationPrincipal LoginUser loginUser,
@@ -32,7 +30,6 @@ public class StoreController {
                 .body(storeService.createStore(loginUser.getUser().getUserId(), reqDto));
     }
 
-    @Secured("ROLE_OWNER")
     @PatchMapping("/{storeId}")
     public ResponseEntity<StoreUpdateRespDto> updateStore(
             @AuthenticationPrincipal LoginUser loginUser,

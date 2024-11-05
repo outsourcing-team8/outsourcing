@@ -9,6 +9,7 @@ import com.sparta.outsourcing.domain.store.dto.response.StoreUpdateRespDto;
 import com.sparta.outsourcing.domain.store.entity.Store;
 import com.sparta.outsourcing.domain.store.repository.StoreRepository;
 import com.sparta.outsourcing.domain.user.entity.User;
+import com.sparta.outsourcing.domain.user.entity.UserRole;
 import com.sparta.outsourcing.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,7 @@ public class StoreService {
     public StoreCreateRespDto createStore(Long ownerId, StoreCreateReqDto reqDto) {
         User owner = userRepository.findById(ownerId)
                 .orElseThrow(() -> new CustomApiException(ErrorCode.USER_NOT_FOUND));
+        if(owner.getRole() != UserRole.OWNER) throw new CustomApiException(ErrorCode.NOT_OWNER);
         if(storeRepository.countByOwnerAndDeletedIsFalse(owner) >= 3) {
             throw new CustomApiException(ErrorCode.TOO_MANY_STORES);
         }

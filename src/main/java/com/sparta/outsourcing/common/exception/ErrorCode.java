@@ -20,6 +20,7 @@ public enum ErrorCode {
     AUTHORITY_NOT_FOUND(403, "권한 정보를 찾을 수 없습니다."),
     STORE_NOT_FOUND(404, "해당 가게가 없습니다."),
     NOT_STORE_OWNER(401, "해당 가게의 사장이 아닙니다."),
+    NOT_OWNER(401, "사장이 아닙니다."),
     ;
 
     private final int status;
