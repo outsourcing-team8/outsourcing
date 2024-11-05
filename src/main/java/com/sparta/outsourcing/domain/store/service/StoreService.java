@@ -76,10 +76,12 @@ public class StoreService {
         return new StoreOneGetRespDto(store, menuList);
     }
 
-    public void deleteStore(User user, Long storeId) {
+    public void deleteStore(Long ownerId, Long storeId) {
+        userRepository.findById(ownerId)
+                .orElseThrow(() -> new CustomApiException(ErrorCode.USER_NOT_FOUND));
         Store store = storeRepository.findByStoreIdAndDeletedIsFalse(storeId)
                 .orElseThrow(() -> new CustomApiException(ErrorCode.STORE_NOT_FOUND));
-        if(!Objects.equals(user.getUserId(), store.getOwner().getUserId())) {
+        if(!Objects.equals(ownerId, store.getOwner().getUserId())) {
             throw new CustomApiException(ErrorCode.NOT_STORE_OWNER);
         }
 

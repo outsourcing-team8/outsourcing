@@ -63,8 +63,8 @@ public class StoreController {
     }
 
     @DeleteMapping("/{storeId}")
-    public ResponseEntity<String> deleteStore(@AuthenticationPrincipal User user, @PathVariable Long storeId) {
-        storeService.deleteStore(user, storeId);
+    public ResponseEntity<String> deleteStore(@AuthenticationPrincipal LoginUser loginUser, @PathVariable Long storeId) {
+        storeService.deleteStore(loginUser.getUser().getUserId(), storeId);
         return ResponseEntity
                 .status(HttpStatus.NO_CONTENT)
                 .body("가게 폐업 성공.");
