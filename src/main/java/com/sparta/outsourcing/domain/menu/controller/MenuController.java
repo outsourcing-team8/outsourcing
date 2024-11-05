@@ -41,6 +41,16 @@ public class MenuController {
                 .body(menuService.patchMenu(storeId, menuId, dto));
     }
 
+    @DeleteMapping("{menuId}")
+    public ResponseEntity<MenuDeleteRespDto> deleteMenu(
+            @PathVariable Long menuId,
+            @PathVariable Long storeId) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(menuService.deleteMenu(menuId, storeId));
+
+    }
+
     @GetMapping()
     public ResponseEntity<List<MenuGetRespDto>> getMenuList(
             @PathVariable Long storeId) {
@@ -58,14 +68,6 @@ public class MenuController {
                 .body(menuService.getMenu(menuId, storeId));
     }
 
-    @DeleteMapping("{menuId}")
-    public ResponseEntity<MenuDeleteRespDto> deleteMenu(
-            @PathVariable Long menuId,
-            @PathVariable Long storeId) {
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(menuService.deleteMenu(menuId, storeId));
 
-    }
 
 }

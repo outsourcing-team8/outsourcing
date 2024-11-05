@@ -5,6 +5,7 @@ import com.sparta.outsourcing.common.exception.ErrorCode;
 import com.sparta.outsourcing.domain.menu.dto.request.MenuCreateReqDto;
 import com.sparta.outsourcing.domain.menu.dto.request.MenuPatchReqDto;
 import com.sparta.outsourcing.domain.menu.dto.response.MenuCreateRespDto;
+import com.sparta.outsourcing.domain.menu.dto.response.MenuDeleteRespDto;
 import com.sparta.outsourcing.domain.menu.dto.response.MenuGetRespDto;
 import com.sparta.outsourcing.domain.menu.dto.response.MenuPatchRespDto;
 import com.sparta.outsourcing.domain.menu.entity.Menu;
@@ -41,7 +42,7 @@ public class MenuService {
                 -> new CustomApiException(ErrorCode.MENU_NOT_FOUND));
 
         if (!Objects.equals(store.getStoreId(), menu.getStore().getStoreId())) {
-            throw new CustomApiException(ErrorCode.STORE_NOT_OWN);
+            throw new CustomApiException(ErrorCode.STORE_NOT_FOUND);
         }
 
         menu.update(dto.getName(), dto.getPrice());
@@ -83,4 +84,5 @@ public class MenuService {
         }
         return menu;
     }
+
 }
