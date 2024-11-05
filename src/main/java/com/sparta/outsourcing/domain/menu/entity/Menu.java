@@ -38,7 +38,7 @@ public class Menu extends BaseEntity {
         this.deleted = deleted;
     }
 
-    public void update( String name, int price) {
+    public void update(String name, int price) {
         this.name = name;
         this.price = price;
     }

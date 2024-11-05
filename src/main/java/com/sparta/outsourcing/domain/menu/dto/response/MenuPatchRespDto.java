@@ -2,7 +2,6 @@ package com.sparta.outsourcing.domain.menu.dto.response;
 
 
 import com.sparta.outsourcing.domain.menu.dto.request.MenuPatchReqDto;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
