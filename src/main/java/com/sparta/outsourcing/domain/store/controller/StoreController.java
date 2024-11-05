@@ -63,7 +63,10 @@ public class StoreController {
     }
 
     @DeleteMapping("/{storeId}")
-    public ResponseEntity<String> deleteStore(@AuthenticationPrincipal LoginUser loginUser, @PathVariable Long storeId) {
+    public ResponseEntity<String> deleteStore(
+            @AuthenticationPrincipal LoginUser loginUser,
+            @PathVariable Long storeId
+    ) {
         storeService.deleteStore(loginUser.getUser().getUserId(), storeId);
         return ResponseEntity
                 .status(HttpStatus.NO_CONTENT)
