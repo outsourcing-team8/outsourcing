@@ -22,6 +22,7 @@ public enum ErrorCode {
 
     PAYMENT_METHOD_NOT_SUPPORT(400, "지원하지 않은 결제 방식 입니다."),
     MIN_PRICE_NOT_MET(400, "최소주문금액을 만족하지 않습니다."),
+    NOT_BUSINESS_HOURS(400, "가게 영업시간이 아닙니다."),
     ;
 
     private final int status;
