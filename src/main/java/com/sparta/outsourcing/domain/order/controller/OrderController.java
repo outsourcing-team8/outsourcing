@@ -41,13 +41,15 @@ public class OrderController {
 		return orderService.findAllByUserId(loginUserId, pageRequest);
 	}
 
-	@GetMapping("/owner/search_condition")
+	@GetMapping("/owner/search-condition")
 	@ResponseStatus(HttpStatus.OK)
 	public OrderListForOwnerRespDto findOrderList(@AuthenticationPrincipal LoginUser loginUser,
-													 @RequestParam(name = "pageNum", defaultValue = "0") int pageNum,
-													 @RequestParam(name = "pageSize", defaultValue = "5") int pageSize) {
+												  @RequestParam(name = "storeId", defaultValue = "0") Long storeId,
+												  @RequestParam(name = "selectedDate", defaultValue = "") String selectedDate,
+												  @RequestParam(name = "pageNum", defaultValue = "0") int pageNum,
+												  @RequestParam(name = "pageSize", defaultValue = "5") int pageSize) {
 		Long loginUserId = loginUser.getUser().getUserId();
-		PageRequest pageRequest = PageRequest.of(pageNum, pageSize, Sort.by(ASC, "created_at"));
-		return null;
+		PageRequest pageRequest = PageRequest.of(pageNum, pageSize, Sort.by(ASC, "createdAt"));
+		return orderService.findAllByOwnerId(loginUserId, storeId, selectedDate, pageRequest);
 	}
 }
