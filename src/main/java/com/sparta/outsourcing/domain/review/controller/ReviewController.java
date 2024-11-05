@@ -1,9 +1,9 @@
 package com.sparta.outsourcing.domain.review.controller;
 
+import com.sparta.outsourcing.common.security.LoginUser;
 import com.sparta.outsourcing.domain.review.dto.request.ReviewCreateReqDto;
 import com.sparta.outsourcing.domain.review.dto.response.ReviewCreateRespDto;
 import com.sparta.outsourcing.domain.review.service.ReviewService;
-import com.sparta.outsourcing.domain.user.entity.User;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,12 +20,12 @@ public class ReviewController {
 
     @PostMapping("/orders/{orderId}")
     public ResponseEntity<ReviewCreateRespDto> createReview(
-            @AuthenticationPrincipal User user,
+            @AuthenticationPrincipal LoginUser loginUser,
             @PathVariable("orderId") Long orderId,
             @RequestBody @Valid ReviewCreateReqDto reqDto
     ) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(reviewService.createReview(user, orderId, reqDto));
+                .body(reviewService.createReview(loginUser.getUser().getUserId(), orderId, reqDto));
     }
 }

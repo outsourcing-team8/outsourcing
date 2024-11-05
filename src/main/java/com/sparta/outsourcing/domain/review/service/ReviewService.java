@@ -8,6 +8,7 @@ import com.sparta.outsourcing.domain.review.dto.request.ReviewCreateReqDto;
 import com.sparta.outsourcing.domain.review.dto.response.ReviewCreateRespDto;
 import com.sparta.outsourcing.domain.review.repository.ReviewRepository;
 import com.sparta.outsourcing.domain.user.entity.User;
+import com.sparta.outsourcing.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,8 +20,11 @@ public class ReviewService {
 
     private final ReviewRepository reviewRepository;
     private final OrderRepository orderRepository;
+    private final UserRepository userRepository;
 
-    public ReviewCreateRespDto createReview(User user, Long orderId, ReviewCreateReqDto reqDto) {
+    public ReviewCreateRespDto createReview(Long userId, Long orderId, ReviewCreateReqDto reqDto) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomApiException(ErrorCode.USER_NOT_FOUND));
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new CustomApiException(ErrorCode.ORDER_NOT_FOUND));
         if(!Objects.equals(user.getUserId(), order.getUser().getUserId())) {
