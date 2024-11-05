@@ -4,6 +4,7 @@ import com.sparta.outsourcing.common.exception.CustomApiException;
 import com.sparta.outsourcing.domain.menu.entity.Menu;
 import com.sparta.outsourcing.domain.menu.repository.MenuRepository;
 import com.sparta.outsourcing.domain.order.dto.request.OrderAddReqDto;
+import com.sparta.outsourcing.domain.order.dto.request.OrderCancelReqDto;
 import com.sparta.outsourcing.domain.order.dto.response.OrderAddRespDto;
 import com.sparta.outsourcing.domain.order.dto.response.OrderFindForUserRespDto;
 import com.sparta.outsourcing.domain.order.dto.response.OrderListForUserRespDto;
@@ -71,11 +72,11 @@ public class OrderService {
 	}
 
 	@Transactional
-	public void cancelOrder(Long loginUserId, Long orderId) {
+	public void cancelOrder(Long loginUserId, OrderCancelReqDto request) {
 		User foundUser = userRepository.findById(loginUserId)
 				.orElseThrow(() -> new CustomApiException(USER_NOT_FOUND));
 
-		Order foundOrder = orderRepository.findById(orderId)
+		Order foundOrder = orderRepository.findById(request.getOrderId())
 				.orElseThrow(() -> new CustomApiException(ORDER_NOT_FOUND));
 
 		if (!foundUser.getUserId().equals(foundOrder.getUser().getUserId())) {
