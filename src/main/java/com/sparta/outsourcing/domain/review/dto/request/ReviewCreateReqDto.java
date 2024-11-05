@@ -4,10 +4,12 @@ import com.sparta.outsourcing.domain.order.entity.Order;
 import com.sparta.outsourcing.domain.review.entity.Review;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.hibernate.validator.constraints.Range;
 
 @Getter
+@AllArgsConstructor
 public class ReviewCreateReqDto {
 
     @NotBlank(message = "후기를 적어주세요.")
