@@ -73,7 +73,7 @@ public class OrderService {
 	public void updateOrderStatus(Long loginUserId, OrderUpdateStatusReqDto request) {
 		OrderStatus requestStatus = findByName(request.getStatus());
 
-		Order foundOrder = orderRepository.findById(loginUserId)
+		Order foundOrder = orderRepository.findById(request.getOrderId())
 				.orElseThrow(() -> new CustomApiException(ORDER_NOT_FOUND));
 		if (foundOrder.getStatus().equals(CANCEL)) {
 			throw new CustomApiException(ALREADY_CANCEL_ORDER);

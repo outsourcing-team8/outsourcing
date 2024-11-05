@@ -45,6 +45,6 @@ public class OrderController {
 	public void updateOrderStatus(@AuthenticationPrincipal LoginUser loginUser,
 								  @RequestBody @Valid OrderUpdateStatusReqDto request) {
 		Long loginUserId = loginUser.getUser().getUserId();
-		// orderService.updateOrderStatus() 호출 예정
+		orderService.updateOrderStatus(loginUserId, request);
 	}
 }
