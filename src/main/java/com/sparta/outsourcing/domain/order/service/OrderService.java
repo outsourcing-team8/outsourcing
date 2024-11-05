@@ -5,6 +5,8 @@ import com.sparta.outsourcing.domain.menu.entity.Menu;
 import com.sparta.outsourcing.domain.menu.repository.MenuRepository;
 import com.sparta.outsourcing.domain.order.dto.request.OrderAddReqDto;
 import com.sparta.outsourcing.domain.order.dto.response.OrderAddRespDto;
+import com.sparta.outsourcing.domain.order.dto.response.OrderFindForUserRespDto;
+import com.sparta.outsourcing.domain.order.dto.response.OrderListForUserRespDto;
 import com.sparta.outsourcing.domain.order.entity.Order;
 import com.sparta.outsourcing.domain.order.enums.PaymentMethod;
 import com.sparta.outsourcing.domain.order.repository.OrderRepository;
@@ -13,10 +15,15 @@ import com.sparta.outsourcing.domain.store.entity.Store;
 import com.sparta.outsourcing.domain.user.entity.User;
 import com.sparta.outsourcing.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.sparta.outsourcing.common.exception.ErrorCode.*;
+import java.util.List;
+
+import static com.sparta.outsourcing.common.exception.ErrorCode.MENU_NOT_FOUND;
+import static com.sparta.outsourcing.common.exception.ErrorCode.USER_NOT_FOUND;
 
 @Service
 @RequiredArgsConstructor
@@ -43,5 +50,19 @@ public class OrderService {
 		Order savedOrder = orderRepository.save(createdOrder);
 
 		return OrderAddRespDto.make(savedOrder);
+	}
+
+	@Transactional(readOnly = true)
+	public OrderListForUserRespDto findAllByUserId(Long loginUserId, PageRequest pageRequest) {
+		User foundUser = userRepository.findById(loginUserId)
+				.orElseThrow(() -> new CustomApiException(USER_NOT_FOUND));
+
+		Slice<Order> foundOrderList = orderRepository.findUserOrderHistory(foundUser.getUserId(), pageRequest);
+
+		List<OrderFindForUserRespDto> responseOrders = foundOrderList.getContent().stream()
+				.map(OrderFindForUserRespDto::make)
+				.toList();
+
+		return OrderListForUserRespDto.make(responseOrders, foundOrderList.getPageable());
 	}
 }
