@@ -63,8 +63,17 @@ public class MenuService {
         if (loginUser.getUser().getRole() != UserRole.OWNER) {
             throw new CustomApiException(ErrorCode.NO_AUTHORITY);
         }
+        Store store = storeRepository.findById(storeId).orElseThrow(()
+                -> new CustomApiException(ErrorCode.STORE_NOT_FOUND));
+        if (!loginUser.getUser().getEmail().equals(store.getOwner().getEmail())) {
+            throw new CustomApiException(ErrorCode.NO_AUTHORITY);
+        }
+        Menu menu = menuRepository.findById(menuId).orElseThrow(()
+                -> new CustomApiException(ErrorCode.MENU_NOT_FOUND));
+        if (!Objects.equals(store.getStoreId(), menu.getStore().getStoreId())) {
+            throw new CustomApiException(ErrorCode.STORE_NOT_OWN);
+        }
 
-        Menu menu = validateMenuOwnership(menuId, storeId);
         menu.deleted(true);
         return new MenuDeleteRespDto(menu);
     }
