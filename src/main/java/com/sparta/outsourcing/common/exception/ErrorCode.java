@@ -9,6 +9,7 @@ public enum ErrorCode {
     ALREADY_USER_EXIST(400, "존재하는 유저입니다."),
     MISS_MATCH_PASSWORD(400, "패스워드 검증에 실패하였습니다."),
 
+
     //menu error
     MENU_NOT_FOUND(404, "해당 메뉴가 없습니다."),
     STORE_NOT_OWN(404,"등록된 메뉴가 아닙니다."),

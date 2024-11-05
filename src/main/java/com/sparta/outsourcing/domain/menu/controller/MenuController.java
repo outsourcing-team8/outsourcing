@@ -3,6 +3,7 @@ package com.sparta.outsourcing.domain.menu.controller;
 import com.sparta.outsourcing.domain.menu.dto.request.MenuCreateReqDto;
 import com.sparta.outsourcing.domain.menu.dto.request.MenuPatchReqDto;
 import com.sparta.outsourcing.domain.menu.dto.response.MenuCreateRespDto;
+import com.sparta.outsourcing.domain.menu.dto.response.MenuDeleteRespDto;
 import com.sparta.outsourcing.domain.menu.dto.response.MenuGetRespDto;
 import com.sparta.outsourcing.domain.menu.dto.response.MenuPatchRespDto;
 import com.sparta.outsourcing.domain.menu.service.MenuService;
@@ -55,6 +56,16 @@ public class MenuController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(menuService.getMenu(menuId, storeId));
+    }
+
+    @DeleteMapping("{menuId}")
+    public ResponseEntity<MenuDeleteRespDto> deleteMenu(
+            @PathVariable Long menuId,
+            @PathVariable Long storeId) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(menuService.deleteMenu(menuId, storeId));
+
     }
 
 
