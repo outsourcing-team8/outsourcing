@@ -8,14 +8,12 @@ import com.sparta.outsourcing.domain.menu.dto.response.MenuDeleteRespDto;
 import com.sparta.outsourcing.domain.menu.dto.response.MenuGetRespDto;
 import com.sparta.outsourcing.domain.menu.dto.response.MenuPatchRespDto;
 import com.sparta.outsourcing.domain.menu.service.MenuService;
-import com.sparta.outsourcing.domain.user.entity.UserRole;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -48,11 +46,11 @@ public class MenuController {
 
     @DeleteMapping("{menuId}")
     public ResponseEntity<MenuDeleteRespDto> deleteMenu(
-            @PathVariable Long menuId,
             @PathVariable Long storeId,
+            @PathVariable Long menuId,
             @AuthenticationPrincipal LoginUser loginUser) {
         return ResponseEntity
-                .status(HttpStatus.OK)
+                .status(HttpStatus.NO_CONTENT)
                 .body(menuService.deleteMenu(menuId, storeId, loginUser));
 
     }
