@@ -8,10 +8,10 @@ import com.sparta.outsourcing.domain.store.dto.request.StoreCreateReqDto;
 import com.sparta.outsourcing.domain.store.dto.request.StoreGetReqDto;
 import com.sparta.outsourcing.domain.store.dto.request.StorePatchReqDto;
 import com.sparta.outsourcing.domain.store.dto.response.StoreCreateRespDto;
-import com.sparta.outsourcing.domain.store.dto.response.StorePatchRespDto;
-import com.sparta.outsourcing.domain.store.dto.response.StoreOneGetRespDto;
-import com.sparta.outsourcing.domain.store.entity.Store;
 import com.sparta.outsourcing.domain.store.dto.response.StoreGetRespDto;
+import com.sparta.outsourcing.domain.store.dto.response.StoreOneGetRespDto;
+import com.sparta.outsourcing.domain.store.dto.response.StorePatchRespDto;
+import com.sparta.outsourcing.domain.store.entity.Store;
 import com.sparta.outsourcing.domain.store.repository.StoreRepository;
 import com.sparta.outsourcing.domain.user.entity.User;
 import com.sparta.outsourcing.domain.user.repository.UserRepository;
@@ -22,10 +22,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Objects;
-
 import java.util.List;
-
 import java.util.Objects;
 
 @Service
