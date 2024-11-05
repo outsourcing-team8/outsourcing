@@ -12,8 +12,8 @@ public class StarRangeValidator implements ConstraintValidator<StarRange, Review
     }
 
     @Override
-    public boolean isValid(ReviewGetReqDto reqDto, ConstraintValidatorContext constraintValidatorContext) {
-        return reqDto.getMinStar() < reqDto.getMaxStar();
+    public boolean isValid(ReviewGetReqDto reqDto, ConstraintValidatorContext context) {
+        return reqDto.getMinStar() <= reqDto.getMaxStar();
     }
 
 }
