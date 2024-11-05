@@ -2,6 +2,7 @@ package com.sparta.outsourcing.domain.menu.dto.response;
 
 
 import com.sparta.outsourcing.domain.menu.dto.request.MenuPatchReqDto;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -10,7 +11,7 @@ import lombok.Getter;
 public class MenuPatchRespDto {
     private Long id;
     private String name;
-    private int price;
+    private Integer price;
 
     public MenuPatchRespDto(Long menuId, MenuPatchReqDto dto) {
         this.id = menuId;
