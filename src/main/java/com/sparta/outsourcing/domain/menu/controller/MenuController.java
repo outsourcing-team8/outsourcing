@@ -8,8 +8,6 @@ import com.sparta.outsourcing.domain.menu.dto.response.MenuGetRespDto;
 import com.sparta.outsourcing.domain.menu.dto.response.MenuPatchRespDto;
 import com.sparta.outsourcing.domain.menu.service.MenuService;
 import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

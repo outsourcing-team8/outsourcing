@@ -5,7 +5,6 @@ import com.sparta.outsourcing.common.exception.ErrorCode;
 import com.sparta.outsourcing.domain.menu.dto.request.MenuCreateReqDto;
 import com.sparta.outsourcing.domain.menu.dto.request.MenuPatchReqDto;
 import com.sparta.outsourcing.domain.menu.dto.response.MenuCreateRespDto;
-import com.sparta.outsourcing.domain.menu.dto.response.MenuDeleteRespDto;
 import com.sparta.outsourcing.domain.menu.dto.response.MenuGetRespDto;
 import com.sparta.outsourcing.domain.menu.dto.response.MenuPatchRespDto;
 import com.sparta.outsourcing.domain.menu.entity.Menu;
@@ -51,16 +50,14 @@ public class MenuService {
 
 
     public List<MenuGetRespDto> getMenuList(Long storeId) {
-       Store store = storeRepository.findById(storeId).orElseThrow(()
+        storeRepository.findById(storeId).orElseThrow(()
                 -> new CustomApiException(ErrorCode.STORE_NOT_FOUND));
 
-        List<Menu> menus = menuRepository.findAllByStore(store);
+        List<Menu> menus = menuRepository.findAllByStoreStoreId(storeId);
 
-        if (menus == null || menus.isEmpty()) {
-            throw new CustomApiException(ErrorCode.MENU_NOT_FOUND);
-        }
-        return menus.stream().map(MenuGetRespDto::toDto).toList();
+        return menus.stream().map(MenuGetRespDto::new).toList();
     }
+
 
     public MenuGetRespDto getMenu(Long menuId, Long storeId) {
         Menu menu = checkException(menuId, storeId);
@@ -82,13 +79,7 @@ public class MenuService {
         Menu menu = menuRepository.findById(menuId).orElseThrow(()
                 -> new CustomApiException(ErrorCode.MENU_NOT_FOUND));
 
-        if(menu.getStore().getStoreId() == store){
-
-        }
-        if (menu == null) {
-            throw new CustomApiException(ErrorCode.MENU_NOT_FOUND);}
-
-        return menu;
+        return new MenuGetRespDto(menu);
     }
 
 }

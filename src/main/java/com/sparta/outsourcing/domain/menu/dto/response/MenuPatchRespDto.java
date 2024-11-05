@@ -10,7 +10,7 @@ import lombok.Getter;
 public class MenuPatchRespDto {
     private Long id;
     private String name;
-    private int price;
+    private Integer price;
 
     public MenuPatchRespDto(Long menuId, MenuPatchReqDto dto) {
         this.id = menuId;
