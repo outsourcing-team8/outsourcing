@@ -26,12 +26,11 @@ public enum ErrorCode {
     AUTHORITY_NOT_FOUND(403, "권한 정보를 찾을 수 없습니다."),
 
     // review error
-    // order error
     PAYMENT_METHOD_NOT_SUPPORT(400, "지원하지 않은 결제 방식 입니다."),
     MIN_PRICE_NOT_MET(400, "최소주문금액을 만족하지 않습니다."),
     NOT_BUSINESS_HOURS(400, "가게 영업시간이 아닙니다."),
 
-    ALREADY_REIVEWED_ORDER(409, "이미 리뷰한 주문입니다."),
+    // order error
     ORDER_NOT_FOUND(404, "해당 주문이 없습니다."),
     NOT_ORDERED(401, "주문자만 리뷰를 작성할 수 있습니다."),
     ALREADY_REVIEWED_ORDER(409, "이미 리뷰한 주문입니다."),
