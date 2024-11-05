@@ -44,6 +44,6 @@ public class OrderController {
 	public void deleteOrder(@AuthenticationPrincipal LoginUser loginUser,
 							@PathVariable(name = "orderId") Long orderId) {
 		Long loginUserId = loginUser.getUser().getUserId();
-		// orderService.deleteOrder() 호출 예정
+		orderService.deleteOrder(loginUserId, orderId);
 	}
 }

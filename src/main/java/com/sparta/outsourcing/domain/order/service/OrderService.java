@@ -23,6 +23,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 import static com.sparta.outsourcing.common.exception.ErrorCode.*;
+import static com.sparta.outsourcing.domain.order.enums.OrderStatus.CANCEL;
+import static com.sparta.outsourcing.domain.order.enums.OrderStatus.DELIVERY_COMPLETED;
 
 @Service
 @RequiredArgsConstructor
@@ -75,6 +77,10 @@ public class OrderService {
 
 		if (!foundUser.getUserId().equals(foundOrder.getUser().getUserId())) {
 			throw new CustomApiException(NOT_ORDER_USER);
+		}
+
+		if (!foundOrder.getStatus().equals(CANCEL) && !foundOrder.getStatus().equals(DELIVERY_COMPLETED)) {
+			throw new CustomApiException(ORDER_NOT_FINISH);
 		}
 
 		foundOrder.deleteOrder();

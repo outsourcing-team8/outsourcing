@@ -36,6 +36,7 @@ public enum ErrorCode {
     NOT_ORDERED(401, "주문자만 리뷰를 작성할 수 있습니다."),
     ALREADY_REVIEWED_ORDER(409, "이미 리뷰한 주문입니다."),
     NOT_ORDER_USER(401, "주문 고객이 아닙니다."),
+    ORDER_NOT_FINISH(400, "현재 진행 중인 주문입니다."),
     ;
 
     private final int status;
