@@ -41,6 +41,10 @@ public class Order extends BaseEntity {
     @Builder.Default
     private OrderStatus status = PENDING;
 
+    @Column(name = "IS_DELETED")
+    @Builder.Default
+    private boolean isDeleted = false;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID")
     private User user;
