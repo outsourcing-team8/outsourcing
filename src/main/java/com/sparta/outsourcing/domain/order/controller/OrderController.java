@@ -2,12 +2,14 @@ package com.sparta.outsourcing.domain.order.controller;
 
 import com.sparta.outsourcing.common.security.LoginUser;
 import com.sparta.outsourcing.domain.order.dto.request.OrderAddReqDto;
+import com.sparta.outsourcing.domain.order.dto.request.OrderUpdateStatusReqDto;
 import com.sparta.outsourcing.domain.order.dto.response.OrderAddRespDto;
 import com.sparta.outsourcing.domain.order.dto.response.OrderListForUserRespDto;
 import com.sparta.outsourcing.domain.order.service.OrderService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,5 +38,13 @@ public class OrderController {
 		Long loginUserId = loginUser.getUser().getUserId();
 		PageRequest pageRequest = PageRequest.of(pageNum, pageSize, Sort.by(DESC, "created_at"));
 		return orderService.findAllByUserId(loginUserId, pageRequest);
+	}
+
+	@PatchMapping("/status")
+	@ResponseStatus(HttpStatus.OK)
+	public void updateOrderStatus(@AuthenticationPrincipal LoginUser loginUser,
+								  @RequestBody @Valid OrderUpdateStatusReqDto request) {
+		Long loginUserId = loginUser.getUser().getUserId();
+		// orderService.updateOrderStatus() 호출 예정
 	}
 }
