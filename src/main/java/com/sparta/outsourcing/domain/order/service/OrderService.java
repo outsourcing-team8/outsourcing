@@ -22,8 +22,8 @@ public class OrderService {
 	private final MenuRepository menuRepository;
 	private final UserRepository userRepository;
 
-	public OrderAddRespDto add(OrderAddReqDto request, Long userId) {
-		User foundUser = userRepository.findById(userId)
+	public OrderAddRespDto add(OrderAddReqDto request, Long loginUserId) {
+		User foundUser = userRepository.findById(loginUserId)
 				.orElseThrow(() -> new CustomApiException(USER_NOT_FOUND));
 
 		Menu foundMenu = menuRepository.findById(request.getMenuId())
