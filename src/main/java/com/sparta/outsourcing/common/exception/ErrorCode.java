@@ -12,7 +12,7 @@ public enum ErrorCode {
     //menu error
     MENU_NOT_FOUND(404, "해당 메뉴가 없습니다."),
     STORE_NOT_OWN(404,"메뉴에 등록된 가게가 아닙니다."),
-    STORE_DUPLICATE(409,"중복된 "),
+    NO_AUTHORITY(403,"권한이 없습니다."),
 
     //store error
     TOO_MANY_STORES(409, "이미 3개의 가게를 가지고 있습니다."),
