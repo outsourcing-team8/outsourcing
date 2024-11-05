@@ -25,8 +25,7 @@ public enum ErrorCode {
     TOKEN_NOT_FOUND(401, "토큰 정보를 찾을 수 없습니다."),
     AUTHORITY_NOT_FOUND(403, "권한 정보를 찾을 수 없습니다."),
 
-    MENU_NOT_FOUND(404, "해당 메뉴가 없습니다."),
-
+    // order error
     PAYMENT_METHOD_NOT_SUPPORT(400, "지원하지 않은 결제 방식 입니다."),
     MIN_PRICE_NOT_MET(400, "최소주문금액을 만족하지 않습니다."),
     NOT_BUSINESS_HOURS(400, "가게 영업시간이 아닙니다."),
