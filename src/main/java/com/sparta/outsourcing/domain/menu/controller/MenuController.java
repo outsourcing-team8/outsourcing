@@ -62,5 +62,4 @@ public class MenuController {
                 .status(HttpStatus.OK)
                 .body(menuService.getMenuList(storeId));
     }
-
 }

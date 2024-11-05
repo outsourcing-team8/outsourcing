@@ -66,6 +66,7 @@ public class MenuService {
                 -> new CustomApiException(ErrorCode.MENU_NOT_FOUND));
 
         if (!Objects.equals(store.getStoreId(), menu.getStore().getStoreId())) {
+
             throw new CustomApiException(ErrorCode.STORE_NOT_OWN);
         }
 
@@ -115,5 +116,7 @@ public class MenuService {
         if (user.getRole() != UserRole.OWNER) {
             throw new CustomApiException(ErrorCode.NO_AUTHORITY);
         }
+
     }
+
 }
