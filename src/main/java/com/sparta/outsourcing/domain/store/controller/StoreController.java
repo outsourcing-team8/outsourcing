@@ -2,6 +2,7 @@ package com.sparta.outsourcing.domain.store.controller;
 
 import com.sparta.outsourcing.common.security.LoginUser;
 import com.sparta.outsourcing.domain.store.dto.request.StoreCreateReqDto;
+import com.sparta.outsourcing.domain.store.dto.request.StoreGetReqDto;
 import com.sparta.outsourcing.domain.store.dto.request.StorePatchReqDto;
 import com.sparta.outsourcing.domain.store.dto.response.StoreCreateRespDto;
 import com.sparta.outsourcing.domain.store.dto.response.StoreGetRespDto;
@@ -47,9 +48,9 @@ public class StoreController {
     public ResponseEntity<Page<StoreGetRespDto>> getStores(
             @RequestParam(name = "page") int page,
             @RequestParam(name = "size", required = false, defaultValue = "10") int size,
-            @RequestParam(name = "name", required = false) String name) {
+            @RequestBody StoreGetReqDto reqDto) {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(storeService.getStores(page-1, size, name));
+                .body(storeService.getStores(page-1, size, reqDto));
     }
 }
