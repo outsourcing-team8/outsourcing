@@ -70,7 +70,7 @@ public class StoreService {
     public StoreOneGetRespDto getOneStore(Long storeId) {
         Store store = storeRepository.findById(storeId)
                 .orElseThrow(() -> new CustomApiException(ErrorCode.STORE_NOT_FOUND));
-        List<Menu> menuList = menuRepository.findAllByStore(store);
+        List<Menu> menuList = menuRepository.findAllByStoreStoreId(storeId);
         return new StoreOneGetRespDto(store, menuList);
     }
 }
