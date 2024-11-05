@@ -80,7 +80,7 @@ public class StoreService {
         Store store = storeRepository.findByStoreIdAndDeletedIsFalse(storeId)
                 .orElseThrow(() -> new CustomApiException(ErrorCode.STORE_NOT_FOUND));
         if(!Objects.equals(user.getUserId(), store.getOwner().getUserId())) {
-            throw new CustomApiException(ErrorCode.STORE_NOT_OWNER);
+            throw new CustomApiException(ErrorCode.NOT_STORE_OWNER);
         }
 
         storeRepository.delete(store);
