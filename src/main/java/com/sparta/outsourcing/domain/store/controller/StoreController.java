@@ -2,9 +2,9 @@ package com.sparta.outsourcing.domain.store.controller;
 
 import com.sparta.outsourcing.common.security.LoginUser;
 import com.sparta.outsourcing.domain.store.dto.request.StoreCreateReqDto;
-import com.sparta.outsourcing.domain.store.dto.request.StoreUpdateReqDto;
+import com.sparta.outsourcing.domain.store.dto.request.StorePatchReqDto;
 import com.sparta.outsourcing.domain.store.dto.response.StoreCreateRespDto;
-import com.sparta.outsourcing.domain.store.dto.response.StoreUpdateRespDto;
+import com.sparta.outsourcing.domain.store.dto.response.StorePatchRespDto;
 import com.sparta.outsourcing.domain.store.service.StoreService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -31,10 +31,10 @@ public class StoreController {
     }
 
     @PatchMapping("/{storeId}")
-    public ResponseEntity<StoreUpdateRespDto> updateStore(
+    public ResponseEntity<StorePatchRespDto> updateStore(
             @AuthenticationPrincipal LoginUser loginUser,
             @PathVariable Long storeId,
-            @RequestBody @Valid StoreUpdateReqDto reqDto
+            @RequestBody @Valid StorePatchReqDto reqDto
     ) {
         return ResponseEntity
                 .status(HttpStatus.OK)

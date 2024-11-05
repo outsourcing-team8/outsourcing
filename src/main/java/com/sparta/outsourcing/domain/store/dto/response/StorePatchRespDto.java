@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @Getter
-public class StoreUpdateRespDto {
+public class StorePatchRespDto {
 
     private final Long storeId;
     private final String name;
@@ -17,7 +17,7 @@ public class StoreUpdateRespDto {
     private final LocalDateTime createdAt;
     private final LocalDateTime updatedAt;
 
-    public StoreUpdateRespDto(Store store) {
+    public StorePatchRespDto(Store store) {
         this.storeId = store.getStoreId();
         this.name = store.getName();
         this.openAt = store.getOpenAt();

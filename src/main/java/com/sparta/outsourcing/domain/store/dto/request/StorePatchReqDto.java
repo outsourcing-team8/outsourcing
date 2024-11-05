@@ -8,7 +8,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.time.LocalTime;
 
 @Getter
-public class StoreUpdateReqDto {
+public class StorePatchReqDto {
 
     @NotNull(message = "영업 시작 시간을 입력해주세요.")
     @DateTimeFormat(pattern = "HH:mm")
