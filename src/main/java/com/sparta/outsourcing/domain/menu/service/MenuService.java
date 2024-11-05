@@ -83,7 +83,6 @@ public class MenuService {
         return menus.stream().map(MenuGetRespDto::new).toList();
     }
 
-
     public MenuGetRespDto getMenu(Long menuId, Long storeId) {
         Menu menu = check(menuId, storeId);
         return new MenuGetRespDto(menu);
