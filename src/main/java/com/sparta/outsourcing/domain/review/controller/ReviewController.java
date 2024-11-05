@@ -39,7 +39,7 @@ public class ReviewController {
     public ResponseEntity<Page<ReviewGetRespDto>> getStoreReviews(
             @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable,
             @PathVariable("storeId") Long storeId,
-            @RequestBody ReviewGetReqDto reqDto
+            @RequestBody @Valid ReviewGetReqDto reqDto
     ) {
         return ResponseEntity
                 .status(HttpStatus.OK)
