@@ -4,6 +4,7 @@ import com.sparta.outsourcing.common.entity.BaseEntity;
 import com.sparta.outsourcing.domain.menu.entity.Menu;
 import com.sparta.outsourcing.domain.order.dto.request.OrderAddReqDto;
 import com.sparta.outsourcing.domain.order.enums.OrderStatus;
+import com.sparta.outsourcing.domain.user.entity.Address;
 import com.sparta.outsourcing.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -53,20 +54,18 @@ public class Order extends BaseEntity {
     @JoinColumn(name = "MENU_ID")
     private Menu menu;
 
-    @Column(name = "STORE_ID")
-    private Long storeId;
+    public static Order create(OrderAddReqDto request, User user, Menu menu) {
+        Address userAddress = user.getAddress();
+        String deliveryAddress = userAddress.getStreet() + " " + userAddress.getDetails() + " " + userAddress.getPostCode();
 
-    public static Order create(OrderAddReqDto request, User user,
-                               Menu menu, Long storeId) {
         return Order.builder()
                 .amount(request.getAmount())
-                .deliveryAddress(request.getDeliveryAddress())
-                .customerPhoneNumber(request.getCustomerPhoneNumber())
+                .deliveryAddress(deliveryAddress)
+                .customerPhoneNumber(user.getPhoneNumber())
                 .requestMessage(request.getRequestMessage())
                 .paymentMethod(request.getPaymentMethod())
                 .user(user)
                 .menu(menu)
-                .storeId(storeId)
                 .build();
     }
 }
