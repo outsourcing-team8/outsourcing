@@ -17,17 +17,20 @@ import com.sparta.outsourcing.domain.store.entity.Store;
 import com.sparta.outsourcing.domain.user.entity.User;
 import com.sparta.outsourcing.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.sparta.outsourcing.common.exception.ErrorCode.*;
 import static com.sparta.outsourcing.domain.order.enums.OrderStatus.CANCEL;
 import static com.sparta.outsourcing.domain.order.enums.OrderStatus.findByName;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class OrderService {
@@ -84,6 +87,9 @@ public class OrderService {
 		if (!foundUser.getUserId().equals(foundOrder.getMenu().getStore().getOwner().getUserId())) {
 			throw new CustomApiException(NOT_STORE_OWNER);
 		}
+
+		log.info("요청 시각 = {}, 가게 ID = {}, 주문 ID = {}",
+				LocalDateTime.now(), foundOrder.getMenu().getStore().getStoreId(), foundOrder.getOrderId());
 
 		foundOrder.updateStatus(requestStatus);
 		orderRepository.save(foundOrder);
