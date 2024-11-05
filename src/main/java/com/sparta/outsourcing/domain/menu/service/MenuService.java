@@ -38,7 +38,7 @@ public class MenuService {
         Store store = storeRepository.findById(storeId).orElseThrow(()
                 -> new CustomApiException(ErrorCode.STORE_NOT_FOUND));
 
-        if (!loginUser.getUser().getEmail().equals(store.getOwner().getEmail())) {
+        if (!user.getEmail().equals(store.getOwner().getEmail())) {
             throw new CustomApiException(ErrorCode.NO_AUTHORITY);
         }
 
@@ -55,6 +55,7 @@ public class MenuService {
     @Transactional
     public MenuPatchRespDto patchMenu(
             Long storeId, Long menuId, MenuPatchReqDto dto, LoginUser loginUser) {
+
         User user = loginUser.getUser();
         checkUserAuthority(user);
 
@@ -63,9 +64,11 @@ public class MenuService {
 
         Menu menu = menuRepository.findById(menuId).orElseThrow(()
                 -> new CustomApiException(ErrorCode.MENU_NOT_FOUND));
+
         if (!Objects.equals(store.getStoreId(), menu.getStore().getStoreId())) {
             throw new CustomApiException(ErrorCode.STORE_NOT_OWN);
         }
+
         menu.update(dto.getName(), dto.getPrice());
         return new MenuPatchRespDto(menuId, dto);
     }
@@ -73,6 +76,7 @@ public class MenuService {
     @Transactional
     public MenuDeleteRespDto deleteMenu(
             Long menuId, Long storeId, LoginUser loginUser) {
+
         User user = loginUser.getUser();
         checkUserAuthority(user);
 
@@ -95,15 +99,19 @@ public class MenuService {
     }
 
     public List<MenuGetRespDto> getMenuList(Long storeId) {
-        storeRepository.findById(storeId).orElseThrow(()
+
+        Store store = storeRepository.findById(storeId).orElseThrow(()
                 -> new CustomApiException(ErrorCode.STORE_NOT_FOUND));
 
-        List<Menu> menus = menuRepository.findAllByStoreStoreId(storeId);
-
-        return menus.stream().map(MenuGetRespDto::new).filter(m -> !m.isDeleted()).toList();
+        return menuRepository.findAllByStoreStoreId(storeId)
+                .stream()
+                .map(MenuGetRespDto::new)
+                .filter(m -> !m.isDeleted())
+                .toList();
     }
 
     private void checkUserAuthority(User user) {
+
         if (user.getRole() != UserRole.OWNER) {
             throw new CustomApiException(ErrorCode.NO_AUTHORITY);
         }
