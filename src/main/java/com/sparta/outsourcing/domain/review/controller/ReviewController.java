@@ -35,7 +35,7 @@ public class ReviewController {
                 .body(reviewService.createReview(loginUser.getUser().getUserId(), orderId, reqDto));
     }
 
-    @GetMapping("/stores/{storeId}")
+    @GetMapping("/stores/{storeId}/star")
     public ResponseEntity<Page<ReviewGetRespDto>> getStoreReviews(
             @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable,
             @PathVariable("storeId") Long storeId,
