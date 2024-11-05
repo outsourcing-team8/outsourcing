@@ -27,7 +27,6 @@ public class StoreService {
     public StoreCreateRespDto createStore(Long ownerId, StoreCreateReqDto reqDto) {
         User owner = userRepository.findById(ownerId)
                 .orElseThrow(() -> new CustomApiException(ErrorCode.USER_NOT_FOUND));
-        if(owner.getRole() != UserRole.OWNER) throw new CustomApiException(ErrorCode.NOT_OWNER);
         if(storeRepository.countByOwnerAndDeletedIsFalse(owner) >= 3) {
             throw new CustomApiException(ErrorCode.TOO_MANY_STORES);
         }
