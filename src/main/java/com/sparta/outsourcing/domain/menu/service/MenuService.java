@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -34,10 +35,16 @@ public class MenuService {
         if (loginUser.getUser().getRole() != UserRole.OWNER) {
             throw new CustomApiException(ErrorCode.NO_AUTHORITY);
         }
-
         Store store = storeRepository.findById(storeId).orElseThrow(()
                 -> new CustomApiException(ErrorCode.STORE_NOT_FOUND));
 
+        Menu menuByName = menuRepository.findByName(dto.getName());
+
+        if (menuByName != null && menuByName.isDeleted()) {
+            menuByName.deleted(false);
+            menuByName.update(dto.getName(), dto.getPrice());
+            return new MenuCreateRespDto(menuByName.getMenuId());
+        }
         return new MenuCreateRespDto(menuRepository.save(dto.toEntity(store)).getMenuId());
     }
 
@@ -56,8 +63,9 @@ public class MenuService {
                 -> new CustomApiException(ErrorCode.MENU_NOT_FOUND));
 
         if (!Objects.equals(store.getStoreId(), menu.getStore().getStoreId())) {
-            throw new CustomApiException(ErrorCode.STORE_NOT_FOUND);
+            throw new CustomApiException(ErrorCode.STORE_NOT_OWN);
         }
+
 
         menu.update(dto.getName(), dto.getPrice());
         return new MenuPatchRespDto(menuId, dto);
@@ -70,7 +78,7 @@ public class MenuService {
         }
 
         Menu menu = check(menuId, storeId);
-        menu.deleted();
+        menu.deleted(true);
         return new MenuDeleteRespDto(menu);
     }
 
@@ -79,6 +87,8 @@ public class MenuService {
                 -> new CustomApiException(ErrorCode.STORE_NOT_FOUND));
 
         List<Menu> menus = menuRepository.findAllByStoreStoreId(storeId);
+
+
 
         return menus.stream().map(MenuGetRespDto::new).toList();
     }
