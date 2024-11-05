@@ -30,7 +30,6 @@ public class MenuController {
             @PathVariable Long storeId,
             @RequestBody @Valid MenuCreateReqDto dto,
             @AuthenticationPrincipal LoginUser loginUser) {
-
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(menuService.createMenu(storeId, dto, loginUser));
@@ -65,15 +64,5 @@ public class MenuController {
                 .status(HttpStatus.OK)
                 .body(menuService.getMenuList(storeId));
     }
-
-    @GetMapping("/{menuId}")
-    public ResponseEntity<MenuGetRespDto> getMenu(
-            @PathVariable Long menuId,
-            @PathVariable Long storeId) {
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(menuService.getMenu(menuId, storeId));
-    }
-
 
 }

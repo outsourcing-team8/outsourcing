@@ -20,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -37,9 +36,7 @@ public class MenuService {
         }
         Store store = storeRepository.findById(storeId).orElseThrow(()
                 -> new CustomApiException(ErrorCode.STORE_NOT_FOUND));
-
         Menu menuByName = menuRepository.findByName(dto.getName());
-
         if (menuByName != null && menuByName.isDeleted()) {
             menuByName.deleted(false);
             menuByName.update(dto.getName(), dto.getPrice());
@@ -55,29 +52,19 @@ public class MenuService {
         if (loginUser.getUser().getRole() != UserRole.OWNER) {
             throw new CustomApiException(ErrorCode.NO_AUTHORITY);
         }
-
-        Store store = storeRepository.findById(storeId).orElseThrow(()
-                -> new CustomApiException(ErrorCode.STORE_NOT_FOUND));
-
-        Menu menu = menuRepository.findById(menuId).orElseThrow(()
-                -> new CustomApiException(ErrorCode.MENU_NOT_FOUND));
-
-        if (!Objects.equals(store.getStoreId(), menu.getStore().getStoreId())) {
-            throw new CustomApiException(ErrorCode.STORE_NOT_OWN);
-        }
-
-
+        Menu menu = validateMenuOwnership(menuId, storeId);
         menu.update(dto.getName(), dto.getPrice());
         return new MenuPatchRespDto(menuId, dto);
     }
 
     @Transactional
-    public MenuDeleteRespDto deleteMenu(Long menuId, Long storeId, LoginUser loginUser) {
+    public MenuDeleteRespDto deleteMenu(
+            Long menuId, Long storeId, LoginUser loginUser) {
         if (loginUser.getUser().getRole() != UserRole.OWNER) {
             throw new CustomApiException(ErrorCode.NO_AUTHORITY);
         }
 
-        Menu menu = check(menuId, storeId);
+        Menu menu = validateMenuOwnership(menuId, storeId);
         menu.deleted(true);
         return new MenuDeleteRespDto(menu);
     }
@@ -85,31 +72,18 @@ public class MenuService {
     public List<MenuGetRespDto> getMenuList(Long storeId) {
         storeRepository.findById(storeId).orElseThrow(()
                 -> new CustomApiException(ErrorCode.STORE_NOT_FOUND));
-
         List<Menu> menus = menuRepository.findAllByStoreStoreId(storeId);
-
-
-
-        return menus.stream().map(MenuGetRespDto::new).toList();
+        return menus.stream().map(MenuGetRespDto::new).filter(m-> !m.isDeleted()).toList();
     }
 
-    public MenuGetRespDto getMenu(Long menuId, Long storeId) {
-        Menu menu = check(menuId, storeId);
-        return new MenuGetRespDto(menu);
-    }
-
-
-    private Menu check(Long menuId, Long storeId) {
+    private Menu validateMenuOwnership(Long menuId, Long storeId) {
         Store store = storeRepository.findById(storeId).orElseThrow(()
                 -> new CustomApiException(ErrorCode.STORE_NOT_FOUND));
-
         Menu menu = menuRepository.findById(menuId).orElseThrow(()
                 -> new CustomApiException(ErrorCode.MENU_NOT_FOUND));
-
         if (!Objects.equals(store.getStoreId(), menu.getStore().getStoreId())) {
             throw new CustomApiException(ErrorCode.STORE_NOT_OWN);
         }
         return menu;
     }
-
 }
