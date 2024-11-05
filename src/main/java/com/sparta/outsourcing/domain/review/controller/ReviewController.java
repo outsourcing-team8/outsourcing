@@ -2,8 +2,10 @@ package com.sparta.outsourcing.domain.review.controller;
 
 import com.sparta.outsourcing.common.security.LoginUser;
 import com.sparta.outsourcing.domain.review.dto.request.ReviewCreateReqDto;
+import com.sparta.outsourcing.domain.review.dto.request.ReviewPatchReqDto;
 import com.sparta.outsourcing.domain.review.dto.request.ReviewGetReqDto;
 import com.sparta.outsourcing.domain.review.dto.response.ReviewCreateRespDto;
+import com.sparta.outsourcing.domain.review.dto.response.ReviewPatchRespDto;
 import com.sparta.outsourcing.domain.review.dto.response.ReviewGetRespDto;
 import com.sparta.outsourcing.domain.review.service.ReviewService;
 import jakarta.validation.Valid;
@@ -55,4 +57,16 @@ public class ReviewController {
                 .status(HttpStatus.OK)
                 .body(reviewService.getStoreReviews(pageable, storeId));
     }
+
+    @PatchMapping("/{reviewId}")
+    public ResponseEntity<ReviewPatchRespDto> updateReview(
+            @AuthenticationPrincipal LoginUser loginUser,
+            @PathVariable("reviewId") Long reviewId,
+            @RequestBody @Valid ReviewPatchReqDto reqDto
+    ) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(reviewService.updateReview(loginUser.getUser().getUserId(), reviewId, reqDto));
+    }
+
 }
