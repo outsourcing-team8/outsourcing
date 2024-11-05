@@ -35,6 +35,7 @@ public enum ErrorCode {
     ORDER_NOT_FOUND(404, "해당 주문이 없습니다."),
     NOT_ORDERED(401, "주문자만 리뷰를 작성할 수 있습니다."),
     ALREADY_REVIEWED_ORDER(409, "이미 리뷰한 주문입니다."),
+    NOT_ORDER_USER(401, "주문 고객이 아닙니다."),
     ;
 
     private final int status;

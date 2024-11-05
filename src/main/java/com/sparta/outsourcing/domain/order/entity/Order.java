@@ -68,4 +68,8 @@ public class Order extends BaseEntity {
                 .menu(menu)
                 .build();
     }
+
+    public void deleteOrder() {
+        this.isDeleted = true;
+    }
 }

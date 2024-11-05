@@ -22,8 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static com.sparta.outsourcing.common.exception.ErrorCode.MENU_NOT_FOUND;
-import static com.sparta.outsourcing.common.exception.ErrorCode.USER_NOT_FOUND;
+import static com.sparta.outsourcing.common.exception.ErrorCode.*;
 
 @Service
 @RequiredArgsConstructor
@@ -64,5 +63,21 @@ public class OrderService {
 				.toList();
 
 		return OrderListForUserRespDto.make(responseOrders, foundOrderList.getPageable());
+	}
+
+	@Transactional
+	public void deleteOrder(Long loginUserId, Long orderId) {
+		User foundUser = userRepository.findById(loginUserId)
+				.orElseThrow(() -> new CustomApiException(USER_NOT_FOUND));
+
+		Order foundOrder = orderRepository.findById(orderId)
+				.orElseThrow(() -> new CustomApiException(ORDER_NOT_FOUND));
+
+		if (!foundUser.getUserId().equals(foundOrder.getUser().getUserId())) {
+			throw new CustomApiException(NOT_ORDER_USER);
+		}
+
+		foundOrder.deleteOrder();
+		orderRepository.save(foundOrder);
 	}
 }
