@@ -17,7 +17,6 @@ import com.sparta.outsourcing.domain.user.entity.User;
 import com.sparta.outsourcing.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,7 +45,7 @@ public class StoreService {
     }
 
     @Transactional
-    public StorePatchRespDto updateStore(Long ownerId, Long storeId, StorePatchReqDto reqDto) {
+    public StorePatchRespDto patchStore(Long ownerId, Long storeId, StorePatchReqDto reqDto) {
         User owner = userRepository.findById(ownerId)
                 .orElseThrow(() -> new CustomApiException(ErrorCode.USER_NOT_FOUND));
         Store store = storeRepository.findById(storeId)
@@ -59,8 +58,7 @@ public class StoreService {
         return new StorePatchRespDto(storeRepository.saveAndFlush(store));
     }
 
-    public Page<StoreGetRespDto> getStores(int page, int size, StoreGetReqDto reqDto) {
-        Pageable pageable = PageRequest.of(page, size);
+    public Page<StoreGetRespDto> getStores(Pageable pageable, StoreGetReqDto reqDto) {
         String name = reqDto.getName();
         if(name == null ||  name.isEmpty()) return storeRepository.findAllByDeletedIsFalse(pageable).map(StoreGetRespDto::new);
         return storeRepository.findAllByDeletedIsFalseAndNameContaining(name, pageable).map(StoreGetRespDto::new);
