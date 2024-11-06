@@ -14,8 +14,14 @@ public class OrderValidator {
         if (storeMinPrice > menuPrice * amount) throw new CustomApiException(MIN_PRICE_NOT_MET);
     }
 
-    public void checkBusinessHours(LocalTime openAt, LocalTime closedAt) {
-        LocalTime now = LocalTime.now();
-        if (now.isBefore(openAt) || now.isAfter(closedAt)) throw new CustomApiException(NOT_BUSINESS_HOURS);
+    public void checkBusinessHours(LocalTime openAt, LocalTime closedAt, LocalTime orderedAt) {
+        if (openAt.isBefore(closedAt)) {
+            if (orderedAt.isBefore(openAt) || orderedAt.isAfter(closedAt))
+                throw new CustomApiException(NOT_BUSINESS_HOURS);
+
+        } else if (openAt.isAfter(closedAt)) {
+            if (orderedAt.isBefore(openAt) && orderedAt.isAfter(closedAt))
+                throw new CustomApiException(NOT_BUSINESS_HOURS);
+        }
     }
 }

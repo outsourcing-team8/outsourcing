@@ -5,11 +5,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalTime;
 
+import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(MockitoExtension.class)
@@ -37,10 +37,11 @@ class OrderValidatorTest {
         // given
         LocalTime storeOpenAt = LocalTime.of(19, 0);
         LocalTime storeClosedAt = LocalTime.of(21, 0);
+        LocalTime orderedAt = LocalTime.of(22, 0);
 
         // when & then
         assertThrows(CustomApiException.class, () ->
-                orderValidator.checkBusinessHours(storeOpenAt, storeClosedAt)
+                orderValidator.checkBusinessHours(storeOpenAt, storeClosedAt, orderedAt)
         );
     }
 
@@ -50,10 +51,25 @@ class OrderValidatorTest {
         // given
         LocalTime storeOpenAt = LocalTime.of(18, 0);
         LocalTime storeClosedAt = LocalTime.of(6, 0);
+        LocalTime orderedAt = LocalTime.of(17, 0);
 
         // when & then
         assertThrows(CustomApiException.class, () ->
-                orderValidator.checkBusinessHours(storeOpenAt, storeClosedAt)
+                orderValidator.checkBusinessHours(storeOpenAt, storeClosedAt, orderedAt)
         );
+    }
+
+    @Test
+    @DisplayName("가게영업시간이 24시간인 경우")
+    void checkBusinessHoursStoreOpenAllDay() {
+        // given
+        LocalTime storeOpenAt = LocalTime.of(0, 0);
+        LocalTime storeClosedAt = LocalTime.of(0, 0);
+        LocalTime orderedAt = LocalTime.of(0, 0);
+
+        // when & then
+        assertThatCode(() ->
+                orderValidator.checkBusinessHours(storeOpenAt, storeClosedAt, orderedAt)
+        ).doesNotThrowAnyException();
     }
 }
