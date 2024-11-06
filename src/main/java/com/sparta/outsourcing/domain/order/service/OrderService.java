@@ -5,8 +5,8 @@ import com.sparta.outsourcing.domain.menu.entity.Menu;
 import com.sparta.outsourcing.domain.menu.repository.MenuRepository;
 import com.sparta.outsourcing.domain.order.convertor.LocalDateTimeConvertor;
 import com.sparta.outsourcing.domain.order.dto.request.OrderAddReqDto;
-import com.sparta.outsourcing.domain.order.dto.request.OrderUpdateStatusReqDto;
 import com.sparta.outsourcing.domain.order.dto.request.OrderCancelReqDto;
+import com.sparta.outsourcing.domain.order.dto.request.OrderUpdateStatusReqDto;
 import com.sparta.outsourcing.domain.order.dto.response.*;
 import com.sparta.outsourcing.domain.order.entity.Order;
 import com.sparta.outsourcing.domain.order.enums.OrderStatus;
@@ -117,7 +117,7 @@ public class OrderService {
 
 	@Transactional
 	public void updateOrderStatus(Long loginUserId, OrderUpdateStatusReqDto request) {
-		OrderStatus requestStatus = findByName(request.getStatus());
+		OrderStatus requestStatus = OrderStatus.findByName(request.getStatus());
 
 		Order foundOrder = orderRepository.findByIdEntityGraph(request.getOrderId())
 				.orElseThrow(() -> new CustomApiException(ORDER_NOT_FOUND));
