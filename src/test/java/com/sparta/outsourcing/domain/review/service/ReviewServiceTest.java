@@ -5,11 +5,13 @@ import com.sparta.outsourcing.domain.order.repository.OrderRepository;
 import com.sparta.outsourcing.domain.review.dto.request.ReviewCreateReqDto;
 import com.sparta.outsourcing.domain.review.dto.response.ReviewCreateRespDto;
 import com.sparta.outsourcing.domain.review.repository.ReviewRepository;
+import com.sparta.outsourcing.domain.store.repository.StoreRepository;
 import com.sparta.outsourcing.domain.user.entity.User;
 import com.sparta.outsourcing.domain.user.repository.UserRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -32,6 +34,12 @@ class ReviewServiceTest {
     UserRepository userRepository;
 
     @Mock
+    StoreRepository storeRepository;
+
+    @InjectMocks
+    ReviewService reviewService;
+
+    @Mock
     User user;
 
     @Mock
@@ -51,9 +59,7 @@ class ReviewServiceTest {
         given(order.getUser()).willReturn(user);
         given(reviewRepository.save(any())).willReturn(reqDto.toEntity(order));
 
-//        ReviewService reviewService = new ReviewService(reviewRepository, orderRepository, userRepository);
-//
-//        ReviewCreateRespDto respDto = reviewService.createReview(userId, orderId, reqDto);
-//        assertNotNull(respDto);
+        ReviewCreateRespDto respDto = reviewService.createReview(userId, orderId, reqDto);
+        assertNotNull(respDto);
     }
 }
