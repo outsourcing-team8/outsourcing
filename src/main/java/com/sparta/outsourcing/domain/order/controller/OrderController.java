@@ -5,6 +5,7 @@ import com.sparta.outsourcing.domain.order.dto.request.OrderAddReqDto;
 import com.sparta.outsourcing.domain.order.dto.request.OrderCancelReqDto;
 import com.sparta.outsourcing.domain.order.dto.request.OrderUpdateStatusReqDto;
 import com.sparta.outsourcing.domain.order.dto.response.OrderAddRespDto;
+import com.sparta.outsourcing.domain.order.dto.response.OrderFindDetailRespDto;
 import com.sparta.outsourcing.domain.order.dto.response.OrderListForOwnerRespDto;
 import com.sparta.outsourcing.domain.order.dto.response.OrderListForUserRespDto;
 import com.sparta.outsourcing.domain.order.service.OrderService;
@@ -28,13 +29,23 @@ public class OrderController {
 	}
 
 	@PostMapping
+	@ResponseStatus(HttpStatus.CREATED)
 	public OrderAddRespDto addOrder(@RequestBody @Valid OrderAddReqDto request,
 									@AuthenticationPrincipal LoginUser loginUser) {
 		Long loginUserId = loginUser.getUser().getUserId();
 		return orderService.add(request, loginUserId);
 	}
 
+	@GetMapping("/{orderId}")
+	@ResponseStatus(HttpStatus.OK)
+	public OrderFindDetailRespDto findOrderDetail(@PathVariable(name = "orderId") Long orderId,
+											@AuthenticationPrincipal LoginUser loginUser) {
+		Long loginUserId = loginUser.getUser().getUserId();
+		return orderService.findOrder(loginUserId, orderId);
+	}
+
 	@GetMapping("/user/search-condition")
+	@ResponseStatus(HttpStatus.OK)
 	public OrderListForUserRespDto findOrderHistory(@AuthenticationPrincipal LoginUser loginUser,
 													@RequestParam(name = "pageNum", defaultValue = "0") int pageNum,
 													@RequestParam(name = "pageSize", defaultValue = "5") int pageSize) {
