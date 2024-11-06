@@ -35,6 +35,7 @@ public enum ErrorCode {
     ORDER_NOT_FOUND(404, "해당 주문이 없습니다."),
     NOT_ORDERED(401, "주문자만 리뷰를 작성할 수 있습니다."),
     ALREADY_REVIEWED_ORDER(409, "이미 리뷰한 주문입니다."),
+    SELECTED_DATE_NOT_VALID(400, "날짜 형식이 올바르지 않습니다."),
     NOT_ORDER_USER(401, "주문 고객이 아닙니다."),
     CAN_NOT_CANCEL_ORDER(400, "주문은 가게에서 주문 수락전일 때만 가능합니다."),
     ;

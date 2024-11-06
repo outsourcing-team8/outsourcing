@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Builder
-public class OrderFindForUserRespDto {
+public class OrderFindForOwnerRespDto {
     private Long orderId;
     private LocalDateTime orderedAt;
     private String status;
@@ -16,11 +16,15 @@ public class OrderFindForUserRespDto {
     private String menuName;
     private int amount;
     private int totalPrice;
+    private String customerPhone;
+    private String deliveryAddress;
+    private String requestMessage;
+    private String paymentMethod;
 
-    public static OrderFindForUserRespDto make(Order order) {
+    public static OrderFindForOwnerRespDto make(Order order) {
         int totalPrice = order.getAmount() * order.getMenu().getPrice();
 
-        return OrderFindForUserRespDto.builder()
+        return OrderFindForOwnerRespDto.builder()
                 .orderId(order.getOrderId())
                 .orderedAt(order.getCreatedAt())
                 .status(order.getStatus().name())
@@ -28,6 +32,10 @@ public class OrderFindForUserRespDto {
                 .menuName(order.getMenu().getName())
                 .amount(order.getAmount())
                 .totalPrice(totalPrice)
+                .customerPhone(order.getCustomerPhoneNumber())
+                .deliveryAddress(order.getDeliveryAddress())
+                .requestMessage(order.getRequestMessage())
+                .paymentMethod(order.getPaymentMethod())
                 .build();
     }
 }
