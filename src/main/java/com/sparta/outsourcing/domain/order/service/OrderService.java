@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 import static com.sparta.outsourcing.common.exception.ErrorCode.*;
@@ -51,13 +52,16 @@ public class OrderService {
 				.orElseThrow(() -> new CustomApiException(MENU_NOT_FOUND));
 		Store foundStore = foundMenu.getStore();
 		orderValidator.checkMinPrice(foundStore.getMinPrice(), foundMenu.getPrice(), request.getAmount());
-		orderValidator.checkBusinessHours(foundStore.getOpenAt(), foundStore.getClosedAt());
+		LocalTime now = LocalTime.now();
+		orderValidator.checkBusinessHours(foundStore.getOpenAt(), foundStore.getClosedAt(), now);
 
 		User foundUser = userRepository.findById(loginUserId)
 				.orElseThrow(() -> new CustomApiException(USER_NOT_FOUND));
 
 		Order createdOrder = Order.create(request, foundUser, foundMenu);
 		Order savedOrder = orderRepository.save(createdOrder);
+
+		leaveLog(foundStore.getStoreId(), savedOrder.getOrderId());
 
 		return OrderAddRespDto.make(savedOrder);
 	}
