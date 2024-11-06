@@ -6,6 +6,7 @@ import com.sparta.outsourcing.domain.menu.repository.MenuRepository;
 import com.sparta.outsourcing.domain.store.dto.request.StoreCreateReqDto;
 import com.sparta.outsourcing.domain.store.dto.request.StorePatchReqDto;
 import com.sparta.outsourcing.domain.store.dto.response.StoreCreateRespDto;
+import com.sparta.outsourcing.domain.store.dto.response.StorePatchRespDto;
 import com.sparta.outsourcing.domain.store.entity.Store;
 import com.sparta.outsourcing.domain.store.repository.StoreRepository;
 import com.sparta.outsourcing.domain.user.entity.User;
@@ -37,18 +38,16 @@ class StoreServiceTest {
     @InjectMocks
     private StoreService storeService;
 
-    @Mock
-    User owner;
-
     Long ownerId = 1L;
-    Long storeId = 1L;
+    User owner = User.builder().userId(ownerId).build();
 
+    Long storeId = 1L;
     String name = "치킨집";
     LocalTime openAt = LocalTime.of(14, 0);
     LocalTime closeAt = LocalTime.of(0, 0);
     int minPrice = 10000;
-
     Store store = Store.builder()
+            .storeId(storeId)
             .owner(owner)
             .name(name)
             .openAt(openAt)
@@ -104,11 +103,9 @@ class StoreServiceTest {
             when(storeRepository.countByOwnerAndDeletedIsFalse(any())).thenReturn(0);
             when(storeRepository.findByName(any())).thenReturn(Optional.of(store));
 
-            //when
+            //when & then
             CustomApiException exception = assertThrows(CustomApiException.class,
                     () -> storeService.createStore(ownerId, reqDto));
-
-            //then
             assertEquals(exception.getErrorCode(), ErrorCode.ALREADY_STORE_EXIST);
         }
     }
