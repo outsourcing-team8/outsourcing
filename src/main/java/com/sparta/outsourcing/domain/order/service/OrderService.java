@@ -5,6 +5,7 @@ import com.sparta.outsourcing.domain.menu.entity.Menu;
 import com.sparta.outsourcing.domain.menu.repository.MenuRepository;
 import com.sparta.outsourcing.domain.order.convertor.LocalDateTimeConvertor;
 import com.sparta.outsourcing.domain.order.dto.request.OrderAddReqDto;
+import com.sparta.outsourcing.domain.order.dto.request.OrderCancelReqDto;
 import com.sparta.outsourcing.domain.order.dto.response.*;
 import com.sparta.outsourcing.domain.order.entity.Order;
 import com.sparta.outsourcing.domain.order.enums.PaymentMethod;
@@ -25,6 +26,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.sparta.outsourcing.common.exception.ErrorCode.*;
+import static com.sparta.outsourcing.domain.order.enums.OrderStatus.CANCEL;
+import static com.sparta.outsourcing.domain.order.enums.OrderStatus.PENDING;
 
 @Slf4j
 @Service
@@ -68,7 +71,7 @@ public class OrderService {
 
 		return OrderListForUserRespDto.make(responseOrders, foundOrderList.getPageable());
 	}
-	
+
 	public OrderListForOwnerRespDto findAllByOwnerId(Long loginUserId, Long storeId,
 													 String selectedDate, PageRequest pageRequest) {
 		LocalDateTime convertedDate = localDateTimeConvertor.convertStringToLocalDateTime(selectedDate);
@@ -87,5 +90,26 @@ public class OrderService {
 				.toList();
 
 		return OrderListForOwnerRespDto.make(responseOrders, foundOrderList.getPageable());
+	}
+
+	@Transactional
+	public void cancelOrder(Long loginUserId, OrderCancelReqDto request) {
+		Order foundOrder = orderRepository.findByIdEntityGraph(request.getOrderId())
+				.orElseThrow(() -> new CustomApiException(ORDER_NOT_FOUND));
+
+		Long orderUserId = foundOrder.getUser().getUserId();
+		if (!orderUserId.equals(loginUserId)) {
+			throw new CustomApiException(NOT_ORDER_USER);
+		}
+
+		if (!foundOrder.getStatus().equals(PENDING)) {
+			throw new CustomApiException(CAN_NOT_CANCEL_ORDER);
+		}
+
+		log.info("요청 시각 = {}, 가게 ID = {}, 주문 ID = {}",
+				LocalDateTime.now(), foundOrder.getMenu().getStore().getStoreId(), foundOrder.getOrderId());
+
+		foundOrder.updateStatus(CANCEL);
+		orderRepository.save(foundOrder);
 	}
 }

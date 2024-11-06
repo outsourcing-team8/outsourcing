@@ -2,6 +2,7 @@ package com.sparta.outsourcing.domain.order.controller;
 
 import com.sparta.outsourcing.common.security.LoginUser;
 import com.sparta.outsourcing.domain.order.dto.request.OrderAddReqDto;
+import com.sparta.outsourcing.domain.order.dto.request.OrderCancelReqDto;
 import com.sparta.outsourcing.domain.order.dto.response.OrderAddRespDto;
 import com.sparta.outsourcing.domain.order.dto.response.OrderListForOwnerRespDto;
 import com.sparta.outsourcing.domain.order.dto.response.OrderListForUserRespDto;
@@ -51,5 +52,13 @@ public class OrderController {
 		Long loginUserId = loginUser.getUser().getUserId();
 		PageRequest pageRequest = PageRequest.of(pageNum, pageSize, Sort.by(ASC, "createdAt"));
 		return orderService.findAllByOwnerId(loginUserId, storeId, selectedDate, pageRequest);
+	}
+
+	@PatchMapping("/cancel")
+	@ResponseStatus(HttpStatus.OK)
+	public void cancelOrder(@AuthenticationPrincipal LoginUser loginUser,
+							@RequestBody @Valid OrderCancelReqDto request) {
+		Long loginUserId = loginUser.getUser().getUserId();
+		orderService.cancelOrder(loginUserId, request);
 	}
 }
