@@ -45,7 +45,7 @@ public class ReviewController {
     ) {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(reviewService.getStoreReviews(pageable, storeId, reqDto));
+                .body(reviewService.getStoreReviewsBetweenStar(pageable, storeId, reqDto));
     }
 
     @GetMapping("/stores/{storeId}")
@@ -69,4 +69,14 @@ public class ReviewController {
                 .body(reviewService.updateReview(loginUser.getUser().getUserId(), reviewId, reqDto));
     }
 
+    @DeleteMapping("/{reviewId}")
+    public ResponseEntity<Void> deleteReview(
+            @AuthenticationPrincipal LoginUser loginUser,
+            @PathVariable("reviewId") Long reviewId
+    ) {
+        reviewService.deleteReview(loginUser.getUser().getUserId(), reviewId);
+        return ResponseEntity
+                .status(HttpStatus.NO_CONTENT)
+                .build();
+    }
 }

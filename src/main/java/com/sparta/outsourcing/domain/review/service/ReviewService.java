@@ -46,7 +46,7 @@ public class ReviewService {
         return new ReviewCreateRespDto(reviewRepository.save(reqDto.toEntity(order)));
     }
 
-    public Page<ReviewGetRespDto> getStoreReviews(Pageable pageable, Long storeId, ReviewGetReqDto reqDto) {
+    public Page<ReviewGetRespDto> getStoreReviewsBetweenStar(Pageable pageable, Long storeId, ReviewGetReqDto reqDto) {
         Store store = storeRepository.findById(storeId)
                 .orElseThrow(() -> new CustomApiException(ErrorCode.STORE_NOT_FOUND));
 
@@ -77,4 +77,15 @@ public class ReviewService {
         return new ReviewPatchRespDto(reviewRepository.saveAndFlush(review));
     }
 
+    public void deleteReview(Long userId, Long reviewId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomApiException(ErrorCode.USER_NOT_FOUND));
+        Review review = reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new CustomApiException(ErrorCode.REVIEW_NOT_FOUND));
+        if(!Objects.equals(user.getUserId(), review.getOrder().getUser().getUserId())) {
+            throw new CustomApiException(ErrorCode.NOT_ORDERED);
+        }
+
+        reviewRepository.delete(review);
+    }
 }
