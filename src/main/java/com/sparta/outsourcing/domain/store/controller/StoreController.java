@@ -12,6 +12,9 @@ import com.sparta.outsourcing.domain.store.service.StoreService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -42,17 +45,17 @@ public class StoreController {
     ) {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(storeService.updateStore(loginUser.getUser().getUserId(), storeId, reqDto));
+                .body(storeService.patchStore(loginUser.getUser().getUserId(), storeId, reqDto));
     }
 
     @GetMapping
     public ResponseEntity<Page<StoreGetRespDto>> getStores(
-            @RequestParam(name = "page") int page,
-            @RequestParam(name = "size", required = false, defaultValue = "10") int size,
-            @RequestBody StoreGetReqDto reqDto) {
+            @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable,
+            @RequestBody StoreGetReqDto reqDto
+    ) {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(storeService.getStores(page-1, size, reqDto));
+                .body(storeService.getStores(pageable, reqDto));
     }
 
     @GetMapping("/{storeId}")
@@ -63,13 +66,13 @@ public class StoreController {
     }
 
     @DeleteMapping("/{storeId}")
-    public ResponseEntity<String> deleteStore(
+    public ResponseEntity<Void> deleteStore(
             @AuthenticationPrincipal LoginUser loginUser,
             @PathVariable Long storeId
     ) {
         storeService.deleteStore(loginUser.getUser().getUserId(), storeId);
         return ResponseEntity
                 .status(HttpStatus.NO_CONTENT)
-                .body("가게 폐업 성공.");
+                .build();
     }
 }
