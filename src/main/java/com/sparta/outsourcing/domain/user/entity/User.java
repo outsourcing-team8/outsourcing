@@ -24,10 +24,8 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private String email;
 
-    @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false)
     private String nickname;
 
     @Enumerated(EnumType.STRING)
@@ -35,7 +33,6 @@ public class User extends BaseEntity {
 
     private boolean deleted = Boolean.FALSE;
 
-    @Column(nullable = false)
     private String phoneNumber;
 
     @Embedded
