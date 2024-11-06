@@ -1,7 +1,6 @@
 package com.sparta.outsourcing.domain.order.repository;
 
 import com.sparta.outsourcing.domain.order.entity.Order;
-import jakarta.annotation.Nullable;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.EntityGraph;
@@ -10,7 +9,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDateTime;
-
 import java.util.Optional;
 
 public interface OrderRepository extends JpaRepository<Order, Long> {
