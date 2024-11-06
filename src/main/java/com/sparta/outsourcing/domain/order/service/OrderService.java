@@ -62,6 +62,22 @@ public class OrderService {
 		return OrderAddRespDto.make(savedOrder);
 	}
 
+	public OrderFindDetailRespDto findOrder(Long loginUserId, Long orderId) {
+		Order foundOrder = orderRepository.findByIdEntityGraph(orderId)
+				.orElseThrow(() -> new CustomApiException(ORDER_NOT_FOUND));
+
+		Long customerId = foundOrder.getUser().getUserId();
+		if (!customerId.equals(loginUserId)) {
+			throw new CustomApiException(NOT_ORDER_USER);
+		}
+
+		Long orderStoreId = foundOrder.getMenu().getStore().getStoreId();
+		Store foundStore = storeRepository.findById(orderStoreId)
+				.orElseThrow(() -> new CustomApiException(STORE_NOT_FOUND));
+
+		return OrderFindDetailRespDto.make(foundOrder, foundStore.getName());
+	}
+
 	public OrderListForUserRespDto findAllByUserId(Long loginUserId, PageRequest pageRequest) {
 		User foundUser = userRepository.findById(loginUserId)
 				.orElseThrow(() -> new CustomApiException(USER_NOT_FOUND));
