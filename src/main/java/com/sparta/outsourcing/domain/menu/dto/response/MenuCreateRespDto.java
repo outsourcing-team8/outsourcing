@@ -7,5 +7,4 @@ import lombok.Getter;
 @AllArgsConstructor
 public class MenuCreateRespDto {
     private Long id;
-
 }

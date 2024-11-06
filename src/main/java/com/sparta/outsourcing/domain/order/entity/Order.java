@@ -68,4 +68,12 @@ public class Order extends BaseEntity {
                 .menu(menu)
                 .build();
     }
+
+    public void updateStatus(OrderStatus status) {
+        this.status = status;
+    }
+
+    public void deleteOrder() {
+        this.isDeleted = true;
+    }
 }
