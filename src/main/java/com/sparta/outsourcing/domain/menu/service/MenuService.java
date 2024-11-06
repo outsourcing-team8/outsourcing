@@ -33,16 +33,15 @@ public class MenuService {
     public MenuCreateRespDto createMenu(
             Long storeId, MenuCreateReqDto dto, LoginUser loginUser) {
         User user = loginUser.getUser();
-        checkUserAuthority(user);
 
         Store store = storeRepository.findById(storeId).orElseThrow(()
                 -> new CustomApiException(ErrorCode.STORE_NOT_FOUND));
 
         if (!user.getEmail().equals(store.getOwner().getEmail())) {
-            throw new CustomApiException(ErrorCode.NO_AUTHORITY);
+            throw new CustomApiException(ErrorCode.NOT_STORE_OWNER);
         }
 
-        Menu menuByName = menuRepository.findByName(dto.getName());
+        Menu menuByName = menuRepository.findByStoreStoreIdAndName(storeId, dto.getName());
         if (menuByName != null && menuByName.isDeleted()) {
             menuByName.deleted(false);
             menuByName.update(dto.getName(), dto.getPrice());
@@ -54,11 +53,7 @@ public class MenuService {
 
     @Transactional
     public MenuPatchRespDto patchMenu(
-            Long storeId, Long menuId, MenuPatchReqDto dto, LoginUser loginUser) {
-
-        User user = loginUser.getUser();
-        checkUserAuthority(user);
-
+            Long storeId, Long menuId, MenuPatchReqDto dto) {
         Store store = storeRepository.findById(storeId).orElseThrow(()
                 -> new CustomApiException(ErrorCode.STORE_NOT_FOUND));
 
@@ -67,7 +62,7 @@ public class MenuService {
 
         if (!Objects.equals(store.getStoreId(), menu.getStore().getStoreId())) {
 
-            throw new CustomApiException(ErrorCode.STORE_NOT_OWN);
+            throw new CustomApiException(ErrorCode.NOT_STORE_OWNER);
         }
 
         menu.update(dto.getName(), dto.getPrice());
@@ -77,15 +72,13 @@ public class MenuService {
     @Transactional
     public MenuDeleteRespDto deleteMenu(
             Long menuId, Long storeId, LoginUser loginUser) {
-
         User user = loginUser.getUser();
-        checkUserAuthority(user);
 
         Store store = storeRepository.findById(storeId).orElseThrow(()
                 -> new CustomApiException(ErrorCode.STORE_NOT_FOUND));
 
         if (user.getEmail().equals(store.getOwner().getEmail())) {
-            throw new CustomApiException(ErrorCode.NO_AUTHORITY);
+            throw new CustomApiException(ErrorCode.NOT_STORE_OWNER);
         }
 
         Menu menu = menuRepository.findById(menuId).orElseThrow(()
@@ -110,13 +103,4 @@ public class MenuService {
                 .filter(m -> !m.isDeleted())
                 .toList();
     }
-
-    private void checkUserAuthority(User user) {
-
-        if (user.getRole() != UserRole.OWNER) {
-            throw new CustomApiException(ErrorCode.NO_AUTHORITY);
-        }
-
-    }
-
 }
