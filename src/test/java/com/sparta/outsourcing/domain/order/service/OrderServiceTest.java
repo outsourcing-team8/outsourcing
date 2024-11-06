@@ -70,7 +70,7 @@ class OrderServiceTest {
         LocalTime closeAt = LocalTime.of(21, 0);
         Store testStore = new Store(1L, owner, "김사장네", openAt, closeAt, 20000);
 
-        Menu testMenu = new Menu(testStore, "삼겹살", 13000, false);
+        Menu testMenu = new Menu(1L, testStore, "삼겹살", 13000, false);
 
         when(menuRepository.findById(any())).thenReturn(Optional.of(testMenu));
         when(userRepository.findById(any())).thenReturn(Optional.of(customer));
