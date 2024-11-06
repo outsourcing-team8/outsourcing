@@ -76,7 +76,7 @@ public class OrderService {
 		User foundUser = userRepository.findById(loginUserId)
 				.orElseThrow(() -> new CustomApiException(USER_NOT_FOUND));
 
-		Order foundOrder = orderRepository.findById(request.getOrderId())
+		Order foundOrder = orderRepository.findByIdEntityGraph(request.getOrderId())
 				.orElseThrow(() -> new CustomApiException(ORDER_NOT_FOUND));
 
 		if (!foundUser.getUserId().equals(foundOrder.getUser().getUserId())) {
