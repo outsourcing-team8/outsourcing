@@ -56,7 +56,6 @@ public class OrderService {
 		return OrderAddRespDto.make(savedOrder);
 	}
 
-	@Transactional(readOnly = true)
 	public OrderListForUserRespDto findAllByUserId(Long loginUserId, PageRequest pageRequest) {
 		User foundUser = userRepository.findById(loginUserId)
 				.orElseThrow(() -> new CustomApiException(USER_NOT_FOUND));
@@ -69,8 +68,7 @@ public class OrderService {
 
 		return OrderListForUserRespDto.make(responseOrders, foundOrderList.getPageable());
 	}
-
-	@Transactional(readOnly = true)
+	
 	public OrderListForOwnerRespDto findAllByOwnerId(Long loginUserId, Long storeId,
 													 String selectedDate, PageRequest pageRequest) {
 		LocalDateTime convertedDate = localDateTimeConvertor.convertStringToLocalDateTime(selectedDate);
