@@ -42,10 +42,15 @@ public class MenuService {
         }
 
         Menu menuByName = menuRepository.findByStoreStoreIdAndName(storeId, dto.getName());
+
         if (menuByName != null && menuByName.isDeleted()) {
             menuByName.deleted(false);
             menuByName.update(dto.getName(), dto.getPrice());
             return new MenuCreateRespDto(menuByName.getMenuId());
+        }
+
+        if (menuByName != null && menuByName.getName().equals(dto.getName())) {
+            throw new CustomApiException(ErrorCode.DUPLICATE_MENU_NAME);
         }
 
         return new MenuCreateRespDto(menuRepository.save(dto.toEntity(store)).getMenuId());
@@ -82,7 +87,7 @@ public class MenuService {
         Store store = storeRepository.findById(storeId).orElseThrow(()
                 -> new CustomApiException(ErrorCode.STORE_NOT_FOUND));
 
-        if (user.getEmail().equals(store.getOwner().getEmail())) {
+        if (!user.getEmail().equals(store.getOwner().getEmail())) {
             throw new CustomApiException(ErrorCode.NOT_STORE_OWNER);
         }
 
@@ -92,6 +97,7 @@ public class MenuService {
         if (!Objects.equals(store.getStoreId(), menu.getStore().getStoreId())) {
             throw new CustomApiException(ErrorCode.STORE_NOT_OWN);
         }
+
 
         menu.deleted(true);
         return new MenuDeleteRespDto(menu);
