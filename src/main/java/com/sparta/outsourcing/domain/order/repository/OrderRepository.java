@@ -8,12 +8,18 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 public interface OrderRepository extends JpaRepository<Order, Long> {
     @Query(value = "SELECT * FROM orders " +
             "WHERE is_deleted = false AND user_id = :loginUserId", nativeQuery = true)
     Slice<Order> findUserOrderHistory(@Param("loginUserId") Long loginUserId, Pageable pageable);
+
+    @Query(value = "SELECT o FROM Order AS o " +
+            "WHERE o.menu.store.storeId = :storeId AND o.createdAt > :selectedDate")
+    Slice<Order> findStoreOrderList(@Param("storeId") Long storeId, @Param("selectedDate") LocalDateTime selectedDate,
+                                    Pageable pageable);
 
     @Query(value = "SELECT o FROM Order AS o WHERE o.orderId = :id")
     @EntityGraph(attributePaths = {"user", "menu"})
