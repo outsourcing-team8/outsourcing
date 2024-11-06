@@ -68,7 +68,7 @@ class OrderServiceTest {
 
         LocalTime openAt = LocalTime.of(9, 0);
         LocalTime closeAt = LocalTime.of(21, 0);
-        Store testStore = new Store(owner, "김사장네", openAt, closeAt, 20000);
+        Store testStore = new Store(1L, owner, "김사장네", openAt, closeAt, 20000);
 
         Menu testMenu = new Menu(testStore, "삼겹살", 13000, false);
 

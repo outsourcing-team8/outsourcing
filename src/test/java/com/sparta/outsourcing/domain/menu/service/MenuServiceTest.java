@@ -17,31 +17,30 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.time.LocalTime;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class MenuServiceTest {
 
-    private static final Logger log = LoggerFactory.getLogger(MenuServiceTest.class);
+    @Mock
+    private StoreRepository storeRepository;
     @Mock
     private MenuRepository menuRepository;
 
-    @Mock
-    private StoreRepository storeRepository;
-
     @InjectMocks
     private MenuService menuService;
-    User user;
+
     Store store;
     LoginUser loginUser;
+    User user;
+
+
     @BeforeEach
     void setUp() {
         Long userId = 1L;
@@ -49,7 +48,6 @@ class MenuServiceTest {
         address.setStreet("APT");
         address.setDetails("100/100");
         address.setPostCode("111-111");
-
         user = User.builder()
                 .userId(userId)
                 .email("asdf@naver.com")
@@ -62,15 +60,25 @@ class MenuServiceTest {
 
         loginUser = new LoginUser(user);
 
-        store = new Store(
-                user, "양념 치킨", LocalTime.of(9, 30), LocalTime.of(20, 0), 100);
+        Long storeId = 1L;
+        String name = "치킨집";
+        LocalTime openAt = LocalTime.of(14, 0);
+        LocalTime closeAt = LocalTime.of(0, 0);
+        int minPrice = 10000;
+        store = Store.builder()
+                .storeId(storeId)
+                .owner(user)
+                .name(name)
+                .openAt(openAt)
+                .closedAt(closeAt)
+                .minPrice(minPrice)
+                .build();
     }
 
     @Test
-    @DisplayName("메뉴 생성 API 테스트")
+    @DisplayName("메뉴 생성 테스트")
     void createMenu() {
-        // Given
-
+        //given
         Menu menu = new Menu(store, "프라이드 치킨", 23000, false);
 
         when(storeRepository.findById(1L)).thenReturn(Optional.of(store));
@@ -82,13 +90,11 @@ class MenuServiceTest {
                 .build();
 
         when(menuRepository.save(any(Menu.class))).thenReturn(menu);
-        // When
+        //when
         MenuCreateRespDto resp = menuService.createMenu(1L, reqDto, loginUser);
-
-        // Then
+        //then
         assertThat(resp).isNotNull();
         assertThat(resp.getId()).isEqualTo(menu.getMenuId());
-
 
     }
 
