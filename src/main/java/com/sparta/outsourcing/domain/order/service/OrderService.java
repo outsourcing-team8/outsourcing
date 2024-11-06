@@ -109,8 +109,7 @@ public class OrderService {
 			throw new CustomApiException(CAN_NOT_CANCEL_ORDER);
 		}
 
-		log.info("요청 시각 = {}, 가게 ID = {}, 주문 ID = {}",
-				LocalDateTime.now(), foundOrder.getMenu().getStore().getStoreId(), foundOrder.getOrderId());
+		leaveLog(foundOrder.getMenu().getStore().getStoreId(), foundOrder.getOrderId());
 
 		foundOrder.updateStatus(CANCEL);
 		orderRepository.save(foundOrder);
@@ -132,8 +131,7 @@ public class OrderService {
 			throw new CustomApiException(NOT_STORE_OWNER);
 		}
 
-		log.info("요청 시각 = {}, 가게 ID = {}, 주문 ID = {}",
-				LocalDateTime.now(), foundOrder.getMenu().getStore().getStoreId(), foundOrder.getOrderId());
+		leaveLog(foundOrder.getMenu().getStore().getStoreId(), foundOrder.getOrderId());
 
 		foundOrder.updateStatus(requestStatus);
 		orderRepository.save(foundOrder);
@@ -157,5 +155,9 @@ public class OrderService {
 
 		foundOrder.deleteOrder();
 		orderRepository.save(foundOrder);
+	}
+
+	private void leaveLog(Long storeId, Long orderId) {
+		log.info("요청 시각 = {}, 가게 ID = {}, 주문 ID = {}", LocalDateTime.now(), storeId, orderId);
 	}
 }
