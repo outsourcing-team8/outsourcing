@@ -4,6 +4,7 @@ import com.sparta.outsourcing.domain.store.entity.Store;
 import com.sparta.outsourcing.domain.user.entity.User;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -11,6 +12,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.time.LocalTime;
 
 @Getter
+@AllArgsConstructor
 public class StoreCreateReqDto {
 
     @NotBlank(message = "가게 이름을 입력해주세요.")
