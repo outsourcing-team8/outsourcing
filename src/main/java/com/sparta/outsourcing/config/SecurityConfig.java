@@ -1,9 +1,12 @@
 package com.sparta.outsourcing.config;
 
+import com.sparta.outsourcing.common.oauth2.CustomOAuth2UserService;
+import com.sparta.outsourcing.common.oauth2.OAuth2LoginSuccessHandler;
 import com.sparta.outsourcing.common.security.JwtProvider;
 import com.sparta.outsourcing.common.security.filter.CustomAuthorizationFilter;
 import com.sparta.outsourcing.common.security.filter.CustomUsernamePasswordAuthenticationFilter;
 import com.sparta.outsourcing.common.security.filter.GlobalFilterExceptionHandler;
+import com.sparta.outsourcing.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -29,7 +32,8 @@ public class SecurityConfig {
 
     private final JwtProvider jwtProvider;
     private final AuthenticationConfiguration authenticationConfiguration;
-
+    private final CustomOAuth2UserService customOAuth2UserService;
+    private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
     @Bean
     @Profile("dev")
     public SecurityFilterChain securityFilterChainDev(HttpSecurity httpSecurity) throws Exception {
@@ -67,6 +71,10 @@ public class SecurityConfig {
                         CustomUsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(new CustomUsernamePasswordAuthenticationFilter(authenticationManager(authenticationConfiguration), jwtProvider),
                         UsernamePasswordAuthenticationFilter.class)
+                .oauth2Login(oauth2login -> oauth2login
+                        .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))
+                        .successHandler(oAuth2LoginSuccessHandler)
+                )
         ;
 
         log.info("Security Filter Chain Test 버전 빈 등록");

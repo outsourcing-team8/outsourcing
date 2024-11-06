@@ -29,13 +29,19 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class OrderServiceTest {
-    @Mock private OrderRepository orderRepository;
-    @Mock private UserRepository userRepository;
-    @Mock private MenuRepository menuRepository;
-    @Mock private StoreRepository storeRepository;
-    @Mock private OrderValidator orderValidator;
+    @Mock
+    private OrderRepository orderRepository;
+    @Mock
+    private UserRepository userRepository;
+    @Mock
+    private MenuRepository menuRepository;
+    @Mock
+    private StoreRepository storeRepository;
+    @Mock
+    private OrderValidator orderValidator;
 
-    @InjectMocks private OrderService orderService;
+    @InjectMocks
+    private OrderService orderService;
 
     @Test
     @DisplayName("주문 생성 기능 정상 작동 확인")
@@ -68,7 +74,7 @@ class OrderServiceTest {
 
         LocalTime openAt = LocalTime.of(9, 0);
         LocalTime closeAt = LocalTime.of(21, 0);
-        Store testStore = new Store(owner, "김사장네", openAt, closeAt, 20000);
+        Store testStore = new Store(1L, owner, "김사장네", openAt, closeAt, 20000);
 
         Menu testMenu = new Menu(testStore, "삼겹살", 13000, false);
 

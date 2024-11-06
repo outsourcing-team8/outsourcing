@@ -29,7 +29,7 @@ public class CustomAuthorizationFilter extends BasicAuthenticationFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String requestURI = request.getRequestURI();
-        if(requestURI.contains("/auth/join") || requestURI.contains("/auth/sign")){
+        if(requestURI.contains("/auth/join") || requestURI.contains("/auth/sign") || requestURI.contains("/oauth") || requestURI.contains("/login")){
             filterChain.doFilter(request, response);
             return;
         }
