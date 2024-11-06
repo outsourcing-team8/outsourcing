@@ -53,16 +53,21 @@ public class MenuService {
 
     @Transactional
     public MenuPatchRespDto patchMenu(
-            Long storeId, Long menuId, MenuPatchReqDto dto) {
+            Long storeId, Long menuId, MenuPatchReqDto dto,LoginUser loginUser) {
+        User user = loginUser.getUser();
+
         Store store = storeRepository.findById(storeId).orElseThrow(()
                 -> new CustomApiException(ErrorCode.STORE_NOT_FOUND));
 
         Menu menu = menuRepository.findById(menuId).orElseThrow(()
                 -> new CustomApiException(ErrorCode.MENU_NOT_FOUND));
 
-        if (!Objects.equals(store.getStoreId(), menu.getStore().getStoreId())) {
-
+        if (!user.getEmail().equals(store.getOwner().getEmail())) {
             throw new CustomApiException(ErrorCode.NOT_STORE_OWNER);
+        }
+
+        if (!Objects.equals(store.getStoreId(), menu.getStore().getStoreId())) {
+            throw new CustomApiException(ErrorCode.STORE_NOT_OWN);
         }
 
         menu.update(dto.getName(), dto.getPrice());
