@@ -41,6 +41,8 @@ public enum ErrorCode {
     REVIEW_NOT_FOUND(404, "해당 리뷰가 없습니다."),
     NOT_ORDERED(401, "주문자만 리뷰를 작성할 수 있습니다."),
     ALREADY_REVIEWED_ORDER(409, "이미 리뷰한 주문입니다."),
+    ORDER_STATUS_NOT_FOUND(400, "요청 주문상태와 일치하는 주문상태 상수를 찾을 수 없습니다."),
+    ALREADY_CANCEL_ORDER(400, "이미 취소된 주문입니다."),
     ;
 
     private final int status;

@@ -53,6 +53,7 @@ public class SecurityConfig {
                         .requestMatchers("/auth/sign").permitAll()
                         .requestMatchers(HttpMethod.POST,"/api/stores").hasRole("OWNER")
                         .requestMatchers(HttpMethod.POST,"/api/stores/{storeId}/menus").hasRole("OWNER")
+                        .requestMatchers("/api/orders/status").hasRole("OWNER")
                         .requestMatchers("/error").permitAll()
                         .requestMatchers("/api/orders/owner/search-condition").hasRole("OWNER")
                         .anyRequest().authenticated()

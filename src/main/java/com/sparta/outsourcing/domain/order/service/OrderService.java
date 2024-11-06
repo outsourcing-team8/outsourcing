@@ -6,8 +6,10 @@ import com.sparta.outsourcing.domain.menu.repository.MenuRepository;
 import com.sparta.outsourcing.domain.order.convertor.LocalDateTimeConvertor;
 import com.sparta.outsourcing.domain.order.dto.request.OrderAddReqDto;
 import com.sparta.outsourcing.domain.order.dto.request.OrderCancelReqDto;
+import com.sparta.outsourcing.domain.order.dto.request.OrderUpdateStatusReqDto;
 import com.sparta.outsourcing.domain.order.dto.response.*;
 import com.sparta.outsourcing.domain.order.entity.Order;
+import com.sparta.outsourcing.domain.order.enums.OrderStatus;
 import com.sparta.outsourcing.domain.order.enums.PaymentMethod;
 import com.sparta.outsourcing.domain.order.repository.OrderRepository;
 import com.sparta.outsourcing.domain.order.validator.OrderValidator;
@@ -110,6 +112,29 @@ public class OrderService {
 				LocalDateTime.now(), foundOrder.getMenu().getStore().getStoreId(), foundOrder.getOrderId());
 
 		foundOrder.updateStatus(CANCEL);
+		orderRepository.save(foundOrder);
+	}
+
+	@Transactional
+	public void updateOrderStatus(Long loginUserId, OrderUpdateStatusReqDto request) {
+		OrderStatus requestStatus = OrderStatus.findByName(request.getStatus());
+
+		Order foundOrder = orderRepository.findByIdEntityGraph(request.getOrderId())
+				.orElseThrow(() -> new CustomApiException(ORDER_NOT_FOUND));
+		if (foundOrder.getStatus().equals(CANCEL)) {
+			throw new CustomApiException(ALREADY_CANCEL_ORDER);
+		}
+
+		User foundUser = userRepository.findById(loginUserId)
+				.orElseThrow(() -> new CustomApiException(USER_NOT_FOUND));
+		if (!foundUser.getUserId().equals(foundOrder.getMenu().getStore().getOwner().getUserId())) {
+			throw new CustomApiException(NOT_STORE_OWNER);
+		}
+
+		log.info("요청 시각 = {}, 가게 ID = {}, 주문 ID = {}",
+				LocalDateTime.now(), foundOrder.getMenu().getStore().getStoreId(), foundOrder.getOrderId());
+
+		foundOrder.updateStatus(requestStatus);
 		orderRepository.save(foundOrder);
 	}
 }
