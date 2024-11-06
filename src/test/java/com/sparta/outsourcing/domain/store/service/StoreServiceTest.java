@@ -2,7 +2,6 @@ package com.sparta.outsourcing.domain.store.service;
 
 import com.sparta.outsourcing.common.exception.CustomApiException;
 import com.sparta.outsourcing.common.exception.ErrorCode;
-import com.sparta.outsourcing.domain.menu.repository.MenuRepository;
 import com.sparta.outsourcing.domain.store.dto.request.StoreCreateReqDto;
 import com.sparta.outsourcing.domain.store.dto.request.StorePatchReqDto;
 import com.sparta.outsourcing.domain.store.dto.response.StoreCreateRespDto;
@@ -23,7 +22,8 @@ import java.time.LocalTime;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class StoreServiceTest {
@@ -32,8 +32,6 @@ class StoreServiceTest {
     private StoreRepository storeRepository;
     @Mock
     private UserRepository userRepository;
-    @Mock
-    private MenuRepository menuRepository;
 
     @InjectMocks
     private StoreService storeService;
