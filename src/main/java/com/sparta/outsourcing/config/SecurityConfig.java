@@ -55,6 +55,7 @@ public class SecurityConfig {
                         .requestMatchers("/auth/sign").permitAll()
                         .requestMatchers(HttpMethod.POST,"/api/stores").hasRole("OWNER")
                         .requestMatchers("/error").permitAll()
+                        .requestMatchers("/api/orders/owner/search-condition").hasRole("OWNER")
                         .anyRequest().authenticated()
                 )
                 .formLogin(AbstractHttpConfigurer::disable)
