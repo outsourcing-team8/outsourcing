@@ -165,4 +165,34 @@ class StoreServiceTest {
         }
     }
 
+    @Nested
+    @DisplayName("deleteStore Test")
+    class deleteStoreTest {
+        @Test
+        @DisplayName("잘못된 storeId를 입력한 경우")
+        void test1() {
+            //given
+            when(userRepository.findById(ownerId)).thenReturn(Optional.of(owner));
+            when(storeRepository.findByStoreIdAndDeletedIsFalse(storeId)).thenReturn(Optional.empty());
+
+            //when & then
+            CustomApiException exception = assertThrows(CustomApiException.class,
+                    () -> storeService.deleteStore(ownerId, storeId));
+            assertEquals(exception.getErrorCode(), ErrorCode.STORE_NOT_FOUND);
+        }
+
+
+        @Test
+        @DisplayName("해당 가게의 사장이 아닌 경우")
+        void test2() {
+            //given
+            when(userRepository.findById(2L)).thenReturn(Optional.of(owner));
+            when(storeRepository.findByStoreIdAndDeletedIsFalse(storeId)).thenReturn(Optional.of(store));
+
+            //when & then
+            CustomApiException exception = assertThrows(CustomApiException.class,
+                    () -> storeService.deleteStore(2L, storeId));
+            assertEquals(exception.getErrorCode(), ErrorCode.NOT_STORE_OWNER);
+        }
+    }
 }
