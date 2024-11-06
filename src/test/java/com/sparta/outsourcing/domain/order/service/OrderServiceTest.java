@@ -6,7 +6,9 @@ import com.sparta.outsourcing.domain.order.dto.request.OrderAddReqDto;
 import com.sparta.outsourcing.domain.order.dto.response.OrderAddRespDto;
 import com.sparta.outsourcing.domain.order.entity.Order;
 import com.sparta.outsourcing.domain.order.repository.OrderRepository;
+import com.sparta.outsourcing.domain.order.validator.OrderValidator;
 import com.sparta.outsourcing.domain.store.entity.Store;
+import com.sparta.outsourcing.domain.store.repository.StoreRepository;
 import com.sparta.outsourcing.domain.user.entity.Address;
 import com.sparta.outsourcing.domain.user.entity.User;
 import com.sparta.outsourcing.domain.user.entity.UserRole;
@@ -30,6 +32,8 @@ class OrderServiceTest {
     @Mock private OrderRepository orderRepository;
     @Mock private UserRepository userRepository;
     @Mock private MenuRepository menuRepository;
+    @Mock private StoreRepository storeRepository;
+    @Mock private OrderValidator orderValidator;
 
     @InjectMocks private OrderService orderService;
 
