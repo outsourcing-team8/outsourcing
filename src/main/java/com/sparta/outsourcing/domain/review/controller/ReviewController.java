@@ -70,13 +70,13 @@ public class ReviewController {
     }
 
     @DeleteMapping("/{reviewId}")
-    public ResponseEntity<String> deleteReview(
+    public ResponseEntity<Void> deleteReview(
             @AuthenticationPrincipal LoginUser loginUser,
             @PathVariable("reviewId") Long reviewId
     ) {
         reviewService.deleteReview(loginUser.getUser().getUserId(), reviewId);
         return ResponseEntity
                 .status(HttpStatus.NO_CONTENT)
-                .body("리뷰 삭제 성공");
+                .build();
     }
 }
