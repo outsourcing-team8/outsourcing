@@ -5,8 +5,11 @@ import com.sparta.outsourcing.common.exception.ErrorCode;
 import com.sparta.outsourcing.domain.order.entity.Order;
 import com.sparta.outsourcing.domain.order.repository.OrderRepository;
 import com.sparta.outsourcing.domain.review.dto.request.ReviewCreateReqDto;
+import com.sparta.outsourcing.domain.review.dto.request.ReviewPatchReqDto;
 import com.sparta.outsourcing.domain.review.dto.request.ReviewGetReqDto;
 import com.sparta.outsourcing.domain.review.dto.response.ReviewCreateRespDto;
+import com.sparta.outsourcing.domain.review.dto.response.ReviewPatchRespDto;
+import com.sparta.outsourcing.domain.review.entity.Review;
 import com.sparta.outsourcing.domain.review.dto.response.ReviewGetRespDto;
 import com.sparta.outsourcing.domain.review.repository.ReviewRepository;
 import com.sparta.outsourcing.domain.store.entity.Store;
@@ -60,4 +63,18 @@ public class ReviewService {
                 .findByOrder_Menu_Store(store, pageable)
                 .map(ReviewGetRespDto::new);
     }
+
+    public ReviewPatchRespDto updateReview(Long userId, Long reviewId, ReviewPatchReqDto reqDto) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomApiException(ErrorCode.USER_NOT_FOUND));
+        Review review = reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new CustomApiException(ErrorCode.REVIEW_NOT_FOUND));
+        if(!Objects.equals(user.getUserId(), review.getOrder().getUser().getUserId())) {
+            throw new CustomApiException(ErrorCode.NOT_ORDERED);
+        }
+
+        review.update(reqDto.getContent(), reqDto.getStar());
+        return new ReviewPatchRespDto(reviewRepository.saveAndFlush(review));
+    }
+
 }
