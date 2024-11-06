@@ -61,6 +61,8 @@ public class OrderService {
 		Order createdOrder = Order.create(request, foundUser, foundMenu);
 		Order savedOrder = orderRepository.save(createdOrder);
 
+		leaveLog(foundStore.getStoreId(), savedOrder.getOrderId());
+
 		return OrderAddRespDto.make(savedOrder);
 	}
 
