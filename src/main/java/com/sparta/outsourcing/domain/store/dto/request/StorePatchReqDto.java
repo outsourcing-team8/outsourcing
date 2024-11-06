@@ -1,6 +1,7 @@
 package com.sparta.outsourcing.domain.store.dto.request;
 
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -8,6 +9,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.time.LocalTime;
 
 @Getter
+@AllArgsConstructor
 public class StorePatchReqDto {
 
     @NotNull(message = "영업 시작 시간을 입력해주세요.")
