@@ -109,4 +109,60 @@ class StoreServiceTest {
             assertEquals(exception.getErrorCode(), ErrorCode.ALREADY_STORE_EXIST);
         }
     }
+
+    @Nested
+    @DisplayName("patchStore Test")
+    class patchStoreTest {
+        StorePatchReqDto reqDto = new StorePatchReqDto(
+                LocalTime.of(11, 30),
+                LocalTime.of(23, 30),
+                13000
+        );
+
+        @Test
+        @DisplayName("가게 정보 수정 정상 작동")
+        void test1() {
+            // given
+            when(userRepository.findById(ownerId)).thenReturn(Optional.of(owner));
+            when(storeRepository.findById(storeId)).thenReturn(Optional.of(store));
+            when(storeRepository.saveAndFlush(any())).thenReturn(store);
+
+            //when
+            StorePatchRespDto respDto = storeService.patchStore(ownerId, storeId, reqDto);
+
+            //then
+            assertNotNull(respDto);
+            assertEquals(reqDto.getOpenAt(), respDto.getOpenAt());
+            assertEquals(reqDto.getClosedAt(), respDto.getClosedAt());
+            assertEquals(reqDto.getMinPrice(), respDto.getMinPrice());
+        }
+
+        @Test
+        @DisplayName("잘못된 storeId를 입력한 경우")
+        void test2() {
+            //given
+            when(userRepository.findById(ownerId)).thenReturn(Optional.of(owner));
+            when(storeRepository.findById(storeId)).thenReturn(Optional.empty());
+
+            //when & then
+            CustomApiException exception = assertThrows(CustomApiException.class,
+                    () -> storeService.patchStore(ownerId, storeId, reqDto));
+            assertEquals(exception.getErrorCode(), ErrorCode.STORE_NOT_FOUND);
+        }
+
+        @Test
+        @DisplayName("해당 가게의 사장이 아닌 경우")
+        void test3() {
+            //given
+            User otherOwner = User.builder().userId(2L).build();
+            when(userRepository.findById(ownerId)).thenReturn(Optional.of(otherOwner));
+            when(storeRepository.findById(storeId)).thenReturn(Optional.of(store));
+
+            //when & then
+            CustomApiException exception = assertThrows(CustomApiException.class,
+                    () -> storeService.patchStore(ownerId, storeId, reqDto));
+            assertEquals(exception.getErrorCode(), ErrorCode.NOT_STORE_OWNER);
+        }
+    }
+
 }
