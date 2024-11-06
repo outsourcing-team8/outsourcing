@@ -41,7 +41,7 @@ public class OrderController {
 	public OrderFindDetailRespDto findOrderDetail(@PathVariable(name = "orderId") Long orderId,
 											@AuthenticationPrincipal LoginUser loginUser) {
 		Long loginUserId = loginUser.getUser().getUserId();
-		return null; // orderService.findOrder() 호출 예정
+		return orderService.findOrder(loginUserId, orderId);
 	}
 
 	@GetMapping("/user/search-condition")
