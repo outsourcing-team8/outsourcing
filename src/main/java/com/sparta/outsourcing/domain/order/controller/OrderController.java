@@ -70,4 +70,12 @@ public class OrderController {
 		Long loginUserId = loginUser.getUser().getUserId();
 		orderService.updateOrderStatus(loginUserId, request);
 	}
+
+	@DeleteMapping("/{orderId}")
+	@ResponseStatus(HttpStatus.OK)
+	public void deleteOrder(@AuthenticationPrincipal LoginUser loginUser,
+							@PathVariable(name = "orderId") Long orderId) {
+		Long loginUserId = loginUser.getUser().getUserId();
+		orderService.deleteOrder(loginUserId, orderId);
+	}
 }

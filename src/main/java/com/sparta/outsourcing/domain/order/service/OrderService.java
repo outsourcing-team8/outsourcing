@@ -30,6 +30,7 @@ import java.util.List;
 import static com.sparta.outsourcing.common.exception.ErrorCode.*;
 import static com.sparta.outsourcing.domain.order.enums.OrderStatus.CANCEL;
 import static com.sparta.outsourcing.domain.order.enums.OrderStatus.PENDING;
+import static com.sparta.outsourcing.domain.order.enums.OrderStatus.DELIVERY_COMPLETED;
 
 @Slf4j
 @Service
@@ -135,6 +136,26 @@ public class OrderService {
 				LocalDateTime.now(), foundOrder.getMenu().getStore().getStoreId(), foundOrder.getOrderId());
 
 		foundOrder.updateStatus(requestStatus);
+		orderRepository.save(foundOrder);
+	}
+
+	@Transactional
+	public void deleteOrder(Long loginUserId, Long orderId) {
+		User foundUser = userRepository.findById(loginUserId)
+				.orElseThrow(() -> new CustomApiException(USER_NOT_FOUND));
+
+		Order foundOrder = orderRepository.findById(orderId)
+				.orElseThrow(() -> new CustomApiException(ORDER_NOT_FOUND));
+
+		if (!foundUser.getUserId().equals(foundOrder.getUser().getUserId())) {
+			throw new CustomApiException(NOT_ORDER_USER);
+		}
+
+		if (!foundOrder.getStatus().equals(CANCEL) && !foundOrder.getStatus().equals(DELIVERY_COMPLETED)) {
+			throw new CustomApiException(ORDER_NOT_FINISH);
+		}
+
+		foundOrder.deleteOrder();
 		orderRepository.save(foundOrder);
 	}
 }
