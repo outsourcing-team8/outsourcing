@@ -73,13 +73,11 @@ public class OrderService {
 
 	@Transactional
 	public void cancelOrder(Long loginUserId, OrderCancelReqDto request) {
-		User foundUser = userRepository.findById(loginUserId)
-				.orElseThrow(() -> new CustomApiException(USER_NOT_FOUND));
-
 		Order foundOrder = orderRepository.findByIdEntityGraph(request.getOrderId())
 				.orElseThrow(() -> new CustomApiException(ORDER_NOT_FOUND));
 
-		if (!foundUser.getUserId().equals(foundOrder.getUser().getUserId())) {
+		Long orderUserId = foundOrder.getUser().getUserId();
+		if (!orderUserId.equals(loginUserId)) {
 			throw new CustomApiException(NOT_ORDER_USER);
 		}
 
