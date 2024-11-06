@@ -42,54 +42,55 @@ class StoreServiceTest {
 
     Long ownerId = 1L;
     Long storeId = 1L;
-    StoreCreateReqDto createReqDto = new StoreCreateReqDto(
-            "교촌 치킨",
-            LocalTime.of(14, 0),
-            LocalTime.of(0, 0),
-            10000
-    );
+
+    String name = "치킨집";
+    LocalTime openAt = LocalTime.of(14, 0);
+    LocalTime closeAt = LocalTime.of(0, 0);
+    int minPrice = 10000;
+
     Store store = Store.builder()
-            .storeId(storeId)
-            .name(createReqDto.getName())
-            .openAt(createReqDto.getOpenAt())
-            .closedAt(createReqDto.getClosedAt())
-            .minPrice(createReqDto.getMinPrice())
+            .owner(owner)
+            .name(name)
+            .openAt(openAt)
+            .closedAt(closeAt)
+            .minPrice(minPrice)
             .build();
 
     @Nested
     @DisplayName("createStore Test")
     class createStoreTest {
+        StoreCreateReqDto reqDto = new StoreCreateReqDto(name,openAt,closeAt,minPrice);
+
         @Test
         @DisplayName("가게 생성 정상 작동")
-        void test1 () {
+        void test1() {
             //given
             when(userRepository.findById(ownerId)).thenReturn(Optional.of(owner));
             when(storeRepository.countByOwnerAndDeletedIsFalse(any())).thenReturn(0);
             when(storeRepository.findByName(any())).thenReturn(Optional.empty());
-            when(storeRepository.save(any())).thenReturn(store);
+            when(storeRepository.save(any())).thenReturn(reqDto.toEntity(owner));
 
             //when
-            StoreCreateRespDto respDto = storeService.createStore(ownerId, createReqDto);
+            StoreCreateRespDto respDto = storeService.createStore(ownerId, reqDto);
 
             // then
             assertNotNull(respDto);
-            assertNotNull(respDto.getStoreId());
-            assertEquals(createReqDto.getName(), respDto.getName());
-            assertEquals(createReqDto.getOpenAt(), respDto.getOpenAt());
-            assertEquals(createReqDto.getClosedAt(), respDto.getClosedAt());
-            assertEquals(createReqDto.getMinPrice(), respDto.getMinPrice());
+            assertEquals(reqDto.getName(), respDto.getName());
+            assertEquals(reqDto.getOpenAt(), respDto.getOpenAt());
+            assertEquals(reqDto.getClosedAt(), respDto.getClosedAt());
+            assertEquals(reqDto.getMinPrice(), respDto.getMinPrice());
         }
 
         @Test
         @DisplayName("회원이 이미 3개의 가게를 운영중인 경우")
-        void test2 () {
+        void test2() {
             //given
             when(userRepository.findById(ownerId)).thenReturn(Optional.of(owner));
             when(storeRepository.countByOwnerAndDeletedIsFalse(any())).thenReturn(3);
 
             //when
             CustomApiException exception = assertThrows(CustomApiException.class,
-                    () -> storeService.createStore(ownerId, createReqDto));
+                    () -> storeService.createStore(ownerId, reqDto));
 
             //then
             assertEquals(exception.getErrorCode(), ErrorCode.TOO_MANY_STORES);
@@ -97,7 +98,7 @@ class StoreServiceTest {
 
         @Test
         @DisplayName("이미 같은 이름의 가게가 영업중인 경우")
-        void test3 () {
+        void test3() {
             //given
             when(userRepository.findById(ownerId)).thenReturn(Optional.of(owner));
             when(storeRepository.countByOwnerAndDeletedIsFalse(any())).thenReturn(0);
@@ -105,7 +106,7 @@ class StoreServiceTest {
 
             //when
             CustomApiException exception = assertThrows(CustomApiException.class,
-                    () -> storeService.createStore(ownerId, createReqDto));
+                    () -> storeService.createStore(ownerId, reqDto));
 
             //then
             assertEquals(exception.getErrorCode(), ErrorCode.ALREADY_STORE_EXIST);
