@@ -1,19 +1,20 @@
 package com.sparta.outsourcing.domain.user.entity;
 
 import com.sparta.outsourcing.common.entity.BaseEntity;
-import com.sparta.outsourcing.domain.user.dto.request.UserCreateReqDto;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "users")
 @SQLDelete(sql = "update users set deleted = true where user_id = ?")
+@SQLRestriction("deleted = false")
 public class User extends BaseEntity {
 
     @Id
