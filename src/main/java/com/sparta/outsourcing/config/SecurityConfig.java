@@ -43,7 +43,7 @@ public class SecurityConfig {
 
 
     @Bean
-    @Profile("test")
+    @Profile("security")
     public SecurityFilterChain securityFilterChainTest(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
