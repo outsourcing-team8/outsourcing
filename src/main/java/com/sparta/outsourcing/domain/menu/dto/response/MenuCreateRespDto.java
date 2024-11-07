@@ -1,5 +1,10 @@
 package com.sparta.outsourcing.domain.menu.dto.response;
 
-public class MenuCreateRespDto {
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
+@Getter
+@AllArgsConstructor
+public class MenuCreateRespDto {
+    private Long id;
 }

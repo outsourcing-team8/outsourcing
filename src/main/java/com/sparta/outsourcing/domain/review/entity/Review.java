@@ -4,6 +4,7 @@ import com.sparta.outsourcing.domain.order.entity.Order;
 import com.sparta.outsourcing.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -21,7 +22,20 @@ public class Review extends BaseEntity {
     private Order order;
 
     @Column(nullable = false)
-    private int start;
+    private String content;
 
+    @Column(nullable = false)
+    private int star;
 
+    @Builder
+    public Review(Order order, String content, int star) {
+        this.order = order;
+        this.content = content;
+        this.star = star;
+    }
+
+    public void update(String content, Integer star) {
+        this.content = content;
+        this.star = star;
+    }
 }
