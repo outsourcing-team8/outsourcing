@@ -35,19 +35,6 @@ public class SecurityConfig {
     private final CustomOAuth2UserService customOAuth2UserService;
     private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
     @Bean
-    @Profile("dev")
-    public SecurityFilterChain securityFilterChainDev(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
-                .formLogin(AbstractHttpConfigurer::disable)
-                .httpBasic(AbstractHttpConfigurer::disable)
-                .csrf(AbstractHttpConfigurer::disable);
-        log.info("Security Filter Chain Dev 버전 빈 등록");
-        return httpSecurity.build();
-    }
-
-
-    @Bean
-    @Profile("test")
     public SecurityFilterChain securityFilterChainTest(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)

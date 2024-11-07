@@ -82,13 +82,15 @@ public class OrderService {
 		return OrderFindDetailRespDto.make(foundOrder, foundStore.getName());
 	}
 
+	@Transactional
 	public OrderListForUserRespDto findAllByUserId(Long loginUserId, PageRequest pageRequest) {
 		User foundUser = userRepository.findById(loginUserId)
 				.orElseThrow(() -> new CustomApiException(USER_NOT_FOUND));
 
 		Slice<Order> foundOrderList = orderRepository.findUserOrderHistory(foundUser.getUserId(), pageRequest);
 
-		List<OrderFindForUserRespDto> responseOrders = foundOrderList.getContent().stream()
+		List<OrderFindForUserRespDto> responseOrders = foundOrderList.getContent()
+				.stream()
 				.map(OrderFindForUserRespDto::make)
 				.toList();
 
