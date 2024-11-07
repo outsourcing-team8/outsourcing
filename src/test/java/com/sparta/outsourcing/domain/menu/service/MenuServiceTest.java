@@ -2,7 +2,9 @@ package com.sparta.outsourcing.domain.menu.service;
 
 import com.sparta.outsourcing.common.security.LoginUser;
 import com.sparta.outsourcing.domain.menu.dto.request.MenuCreateReqDto;
+import com.sparta.outsourcing.domain.menu.dto.request.MenuPatchReqDto;
 import com.sparta.outsourcing.domain.menu.dto.response.MenuCreateRespDto;
+import com.sparta.outsourcing.domain.menu.dto.response.MenuPatchRespDto;
 import com.sparta.outsourcing.domain.menu.entity.Menu;
 import com.sparta.outsourcing.domain.menu.repository.MenuRepository;
 import com.sparta.outsourcing.domain.store.entity.Store;
@@ -79,7 +81,7 @@ class MenuServiceTest {
     @DisplayName("메뉴 생성 테스트")
     void createMenu() {
         //given
-        Menu menu = new Menu(store, "프라이드 치킨", 23000, false);
+        Menu menu = new Menu(1L, store, "프라이드 치킨", 23000, false);
 
         when(storeRepository.findById(1L)).thenReturn(Optional.of(store));
         when(menuRepository.findByStoreStoreIdAndName(1L, "프라이드 치킨")).thenReturn(null);
@@ -96,6 +98,31 @@ class MenuServiceTest {
         assertThat(resp).isNotNull();
         assertThat(resp.getId()).isEqualTo(menu.getMenuId());
 
+    }
+    @Test
+    @DisplayName("메뉴 수정 테스트")
+    void patchMenu(){
+        //given
+        Menu menu = new Menu(1L, store, "프라이드 치킨", 23000, false);
+
+        when(storeRepository.findById(store.getStoreId())).thenReturn(Optional.of(store));
+        when(menuRepository.findById(menu.getMenuId())).thenReturn(Optional.of(menu));
+
+        MenuPatchReqDto reqDto = MenuPatchReqDto.builder()
+                .name("양념 치킨")
+                .price(24000)
+                .build();
+
+        when(menuRepository.saveAndFlush(any(Menu.class))).thenReturn(menu);
+        //when
+        MenuPatchRespDto respDto = menuService.patchMenu(
+                store.getStoreId(),menu.getMenuId(),reqDto,loginUser);
+
+        //then
+        assertThat(respDto).isNotNull();
+        assertThat(respDto.getId()).isEqualTo(menu.getMenuId());
+        assertThat(respDto.getName()).isEqualTo(menu.getName());
+        assertThat(respDto.getPrice()).isEqualTo(menu.getPrice());
     }
 
 

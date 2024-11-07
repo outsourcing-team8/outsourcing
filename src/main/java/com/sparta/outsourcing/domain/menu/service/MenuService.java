@@ -74,6 +74,7 @@ public class MenuService {
         }
 
         menu.update(dto.getName(), dto.getPrice());
+        menuRepository.saveAndFlush(menu);
         return new MenuPatchRespDto(menuId, dto);
     }
 
